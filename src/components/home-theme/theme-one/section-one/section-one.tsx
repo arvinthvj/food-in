@@ -1,10 +1,22 @@
-import React, { useEffect, useState, useRef, useContext, ChangeEvent } from "react";
-import Select from 'react-select';
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useContext,
+  ChangeEvent,
+} from "react";
+import Select from "react-select";
 //import 'react-select/dist/react-select.css'; // Make sure to include the CSS
-import {ReactSearchAutocomplete}  from 'react-search-autocomplete';
+import { ReactSearchAutocomplete } from "react-search-autocomplete";
+// import { Popover} from 'reactstrap';
+import { Popover } from "antd";
+import AsyncSelect from "react-select/async";
 import { bannerImg } from "../../../../assets/img";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPostalCodes, fetchPostalCodesApi } from "../../../../redux/Actions";
+import {
+  fetchPostalCodes,
+  fetchPostalCodesApi,
+} from "../../../../redux/Actions";
 import { setLocalValue } from "../../../../utility";
 import { end_points } from "../../../../core/end_points/end_points";
 import { ApiServiceContext } from "../../../../core/Api/api.service";
@@ -24,10 +36,11 @@ const SectionOneThemeOne: React.FC = () => {
   const { getData } = useContext(ApiServiceContext);
   const [preOderShow, setPreOderShow] = useState<any>("");
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [suggestions, setSuggestions] = useState([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [suggestions, setSuggestions] = useState<any>([]);
   const [selectedOption, setSelectedOption] = useState<any>();
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const [popoverOpen, setpopoverOpen] = useState<any>(false);
 
   const [error, setError] = useState<string | null>(null); // Added error state
   // const postcodesuggs: any = useSelector<any>(
@@ -36,55 +49,58 @@ const SectionOneThemeOne: React.FC = () => {
   // console.log(postcodesuggs, "postalCodeSuggs")
   const jsonData: any = useSelector<any>((state) => state.homeJsonList);
 
-  const handleInputChange =async (value: String)=> {
-    debugger
+  const handleInputChange = async (value: String) => {
     const result = value.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
     // setPostalCodeList(e.target.value);
 
     const updateValue = value.replace(/\s/g, "");
     if (value.length > 1) {
-      const response = await getData(end_points.locationfetchAPi.url +`?keyword=${updateValue}`);
-      // const postalcodes=response.data
+      setTimeout(async () => {
+        const response = await getData(
+          end_points.locationfetchAPi.url + `?keyword=${updateValue}`
+        );
 
-//console.log(response.data, 998, postalcodes)
-const data = await response;
-const fetchdata= data.data.data
-      console.log(fetchdata, "locationfetch response");
-     debugger
-setSuggestions(fetchdata)
-setIsDropdownOpen(true); // Open the dropdown when typing
+        const data = await response;
+        const fetchdata = data.data.data;
+        console.log(fetchdata, "locationfetch response");
+        setSuggestions(fetchdata);
+        setpopoverOpen(true);
+        setIsDropdownOpen(true); // Open the dropdown when typing
 
-     dispatch(fetchPostalCodes(updateValue));
-     
-     //dispatch(fetchPostalCodesApi(updateValue))+
-      console.log(55555,updateValue)
-    } else{
-      setSuggestions([])
+        dispatch(fetchPostalCodes(updateValue));
+
+        //dispatch(fetchPostalCodesApi(updateValue))+
+      }, 1100);
+      console.log(55555, updateValue);
+    } else {
+      setpopoverOpen(false);
+      setSuggestions([]);
     }
     setPostalCodeValue(updateValue);
     const newSearchTerm = value;
-   console.log(newSearchTerm,999, searchTerm, value)
+    console.log(newSearchTerm, 999, searchTerm, value);
 
     setSearchTerm(newSearchTerm);
     //dispatch(fetchPostalCodes(value));
-
   };
 
-  const filteredOptions = suggestions?.filter((option:any) =>
-  option.postcode.toLowerCase().includes(searchTerm.toLowerCase())
-);
+  const filteredOptions = Array.isArray(suggestions)
+    ? suggestions.filter((option: any) =>
+        option.postcode.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
 
-// const handleSelectOption = (option: any) => {
-//   setSelectedOption(option);
-//   setSearchTerm('');
-//   setIsDropdownOpen(false);
-// };
+  // const handleSelectOption = (option: any) => {
+  //   setSelectedOption(option);
+  //   setSearchTerm('');
+  //   setIsDropdownOpen(false);
+  // };
 
-// console.log(searchTerm,selectedOption,isDropdownOpen,"gvgbbcfxdxdsae")
+  // console.log(searchTerm,selectedOption,isDropdownOpen,"gvgbbcfxdxdsae")
 
-// const toggleDropdown = () => {
-//   setIsDropdownOpen((prev) => !prev);
-// };
+  // const toggleDropdown = () => {
+  //   setIsDropdownOpen((prev) => !prev);
+  // };
 
   const locationFetch = async () => {
     try {
@@ -103,7 +119,7 @@ setIsDropdownOpen(true); // Open the dropdown when typing
         setError("Invalid data format received from the API");
       }
     } catch (error) {
-     // setError("Error fetching location data: " + error.message);
+      // setError("Error fetching location data: " + error.message);
     }
   };
 
@@ -111,38 +127,44 @@ setIsDropdownOpen(true); // Open the dropdown when typing
     locationFetch();
   }, []);
 
-  const onSearch = (searchTerm: any) => {
+  const onSearch = (selectedOption: any) => {
     // setPostalCodeList(searchTerm);
-    setPostalCodeValue(searchTerm);
-   // console.log(setPostalCodeValue(searchTerm), "fetchterm")
-   // setLocalValue("postalCode", searchTerm);
-     dispatch(fetchPostalCodes(searchTerm));
-     
-  };
-  console.log(suggestions,"234")
-
-  const handleSelectOption = (selectedOption: any) => {
-    setSelectedOption(selectedOption); 
-    setPostalCodeValue(searchTerm);
-    setSearchTerm("")
+    setPostalCodeValue(selectedOption.postcode);
     // console.log(setPostalCodeValue(searchTerm), "fetchterm")
     // setLocalValue("postalCode", searchTerm);
-    dispatch(fetchPostalCodes(searchTerm));
-    setIsDropdownOpen(false)
-      
-   // setPostalCodeValue(selectedOption.value);
+    dispatch(fetchPostalCodes(selectedOption.postcode));
   };
-  console.log(selectedOption,"234", suggestions,searchTerm, filteredOptions,postalCodeValue,isDropdownOpen)
+  // console.log(suggestions,"234")
 
- 
+  const handleSelectOption = (selectedOption: any) => {
+    setSelectedOption(selectedOption);
+    setPostalCodeValue(selectedOption.postcode);
+    setSearchTerm(selectedOption.postcode);
+    setpopoverOpen(false);
+    // console.log(setPostalCodeValue(searchTerm), "fetchterm")
+    // setLocalValue("postalCode", searchTerm);
+    dispatch(fetchPostalCodes(selectedOption.postcode));
+    setIsDropdownOpen(false);
+
+    // setPostalCodeValue(selectedOption.value);
+  };
+  console.log(
+    selectedOption,
+    "234",
+    suggestions,
+    searchTerm,
+    filteredOptions,
+    postalCodeValue,
+    isDropdownOpen
+  );
+
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
- 
+
   // useEffect(() => {
   //   if (searchTerm.length >= 2) {
   //     console.log(searchTerm, "searchTerm")
-
 
   //     fetch(end_points.locationfetchAPi.url + `?keyword=${searchTerm}`)
   //     .then((response) => {
@@ -163,11 +185,10 @@ setIsDropdownOpen(true); // Open the dropdown when typing
   //       setError("Error fetching suggestions: " + error.message);
   //     });
   //   } else {
-      
+
   //     setPostalCodeList([]);
   //   }
   //  }, [searchTerm]);
-
 
   // const handleChange = (e: any) => {
   //   const result = e.target.value.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
@@ -179,8 +200,7 @@ setIsDropdownOpen(true); // Open the dropdown when typing
   //   }
   //   setPostalCodeValue(updateValue);
   // };
-  
-  
+
   const handleBooknow = async () => {
     const response = await getData(end_points.checkPreOrderApi.url);
     let validTime = response?.data?.data?.online_order_status;
@@ -214,7 +234,7 @@ setIsDropdownOpen(true); // Open the dropdown when typing
   useEffect(() => {
     if (state) {
       setPostalCodeList(state.postalCodeList);
-      console.log(state, "state")
+      console.log(state, "state");
     }
   }, [state]);
 
@@ -222,145 +242,81 @@ setIsDropdownOpen(true); // Open the dropdown when typing
     <>
       <div
         className="home_single_search"
-        style={{ background: `url(${jsonData?.theme_1?.home?.section_1?.banner})` }}
+        style={{
+          background: `url(${jsonData?.theme_1?.home?.section_1?.banner})`,
+        }}
       >
         <div className="container-fluid">
           <div className="row justify-content-center">
             <div className="col-md-12 col-lg-8">
               <div className="banner-search-wrap text-center">
-                  <>
-                    <h1>{jsonData?.theme_1?.home?.section_1?.title}</h1>
-                    <p>
-                      {jsonData?.theme_1?.home?.section_1?.paragraph}
-                    </p>
-                  </>
+                <>
+                  <h1>{jsonData?.theme_1?.home?.section_1?.title}</h1>
+                  <p>{jsonData?.theme_1?.home?.section_1?.paragraph}</p>
+                </>
                 <div
                   className="postcodeform"
                   style={{
                     background: `#${jsonData?.theme_1?.home?.section_1?.input_section?.bg_color}`,
                   }}
                 >
-
-                  
-                                 
                   <i className="fas fa-location-arrow map-icon d-flex align-items-center" />
 
-                  {/* <div className="select-with-search">
-      <div className={`dropdown ${isDropdownOpen ? 'open' : ''}`}>
-        <input
-          type="text"
-          value={searchTerm}
-          name="pincode"
-          placeholder={
-                      jsonData?.theme_1?.home?.section_1?.input_section
-                        ?.placeholder
-                    }
-          style={{
-                      background: `#${jsonData?.theme_1?.home?.section_1?.input_section?.bg_color}`,
-                      color: `#${jsonData?.theme_1?.home?.section_1?.input_section?.placeholder_color}`,
-                    }}
-                    className="ui-autocomplete-input"
-          onClick={toggleDropdown}
-          id="postcode-input"
-          onChange={handleInputChange}
-        />
-        <ul className="options">
-          {filteredOptions.map((opt:any, index) => (
-            <li
-              key={index}
-              onClick={() => handleSelectOption(opt)}
-            >
-              {opt.postcode}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="selected-option">
-        {selectedOption ? selectedOption : 'Select an option'}
-      </div>
-    </div> */}
-          {/* <div className={`dropdown ${isDropdownOpen ? 'open' : ''}`}> */}
-          <div style={{width: 400}}>
-          <ReactSearchAutocomplete
-          
-            items={(suggestions||[].map((e:any)=> {
-              debugger
-              return {id : e.postcode , name: e.postcode}
-            }))}
-            onSearch={(e)=>{
-              debugger
-              handleInputChange(e)
-            }}
-            // onHover={handleOnHover}
-            // onSelect={handleOnSelect}
-            // onFocus={handleOnFocus}
-            autoFocus
-            // formatResult={formatResult}
-          />
-          </div>
-                  {/* <input
-                    type="text"
-                    id="postcode-input"
-                     value={searchTerm}
-                     onClick={toggleDropdown}
-
-                  //  value={postalCodeValue}
-                    name="pincode"
-                    placeholder={
-                      jsonData?.theme_1?.home?.section_1?.input_section
-                        ?.placeholder
-                    }
-                    style={{
-                      background: `#${jsonData?.theme_1?.home?.section_1?.input_section?.bg_color}`,
-                      color: `#${jsonData?.theme_1?.home?.section_1?.input_section?.placeholder_color}`,
-                    }}
-                    className="ui-autocomplete-input"
-                    onChange={handleInputChange}
-                    autoComplete="off"
-                  /> */}
-                  {/* <select value={selectedOption} onChange={handleSelectChange}>
-  <option value="">select an option</option>
-  {filteredOptions && filteredOptions?.map((suggestion:any, index) => (
-    <option key={index} value={suggestion?.postcode}>
-      {suggestion.postcode} 
-    </option>
-  ))}
-      <option value="7">Data</option>
-
-</select> */}
-
-
-<ul className="options">
-          {filteredOptions.map((opt:any, index) => (
-            <li
-              key={index}
-              onClick={() => handleSelectOption(opt)}
-            >
-              {opt.postcode}
-            </li>
-          ))}
-        </ul>
-        {/* </div> */}
-        <div className="selected-option">
-        {selectedOption ? selectedOption.postcode : ''}
-      </div>
-                   {/* <ul>
-                    
-        {suggestions.map((suggestion:any, index:number) => (
-          <li key={index} onClick={() => onSearch(suggestion.postcode)}>{suggestion.postcode}</li>
-        ))}
-      </ul> */}
-
-{/* <Select
-  options={suggestions.map((suggestion) => ({
-    value: suggestion.postcode,
-    label: suggestion.postcode,
-  }))}
-  value={selectedOption}
-  onChange={handleSelectChange}
-  isSearchable={true}
-  placeholder="Select or search for a postcode..."
-/> */}
+                  <div style={{ width: "100%" }}>
+                    <Popover
+                      className="find_food_popover"
+                      style={{ width: "400px" }}
+                      placement="bottom"
+                      content={
+                        filteredOptions.length > 0 ? (
+                          <ul className="options">
+                            {filteredOptions.map((opt: any, index: any) => (
+                              <li
+                                className="find_food_popover_option"
+                                style={{
+                                  cursor: "pointer",
+                                }}
+                                key={index}
+                                onClick={() => {
+                                  handleSelectOption(opt);
+                                }}
+                              >
+                                {opt.postcode}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <div>No suggestions found</div>
+                        )
+                      }
+                      title=""
+                      trigger="click"
+                      open={popoverOpen}
+                      // onOpenChange={handleOpenChange}
+                    >
+                      <input
+                        type="text"
+                        id="postcode-input"
+                        value={searchTerm}
+                        onClick={toggleDropdown}
+                        //  value={postalCodeValue}
+                        name="pincode"
+                        placeholder={
+                          jsonData?.theme_1?.home?.section_1?.input_section
+                            ?.placeholder
+                        }
+                        style={{
+                          background: `#${jsonData?.theme_1?.home?.section_1?.input_section?.bg_color}`,
+                          color: `#${jsonData?.theme_1?.home?.section_1?.input_section?.placeholder_color}`,
+                        }}
+                        className="ui-autocomplete-input"
+                        onChange={(e) => {
+                          handleInputChange(e.target.value);
+                        }}
+                        autoComplete="off"
+                      />
+                    </Popover>
+                  </div>
 
                   <button
                     disabled={postalCodeValue.length === 0}
@@ -406,7 +362,7 @@ setIsDropdownOpen(true); // Open the dropdown when typing
       </div>
       {preOderShow ? (
         <>
-          <PreOrderModel 
+          <PreOrderModel
             preOderShow={preOderShow}
             cancel={() => {
               setPreOderShow(false);

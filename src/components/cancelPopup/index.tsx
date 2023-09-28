@@ -14,7 +14,7 @@ const CancelPopup: React.FC<{ orderId: string; close: any }> = ({
     close();
   };
 
-  const base_url = "https://api.bestatservices.com";
+  const base_url = "https://api.bestatrestaurant.com";
 
   function cancelOrder() {
     const token = localStorage.getItem("token");

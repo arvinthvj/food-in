@@ -1549,7 +1549,15 @@ ul.header-link li.login a {
     width: 100%;
     height: 50px;
 }
-
+.ant-popover-content{
+    width: 670px !important;
+}
+.find_food_popover_option{
+    height: 27px;
+}
+.find_food_popover_option:hover{
+    background: #ececf7;
+}
 .home_single_search .postcodeform input[type="text"]:focus {
     border: 0;
     outline: 0;

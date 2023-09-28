@@ -3,6 +3,7 @@ import { ColorPicker } from "primereact/colorpicker";
 // import { fetchHomeJsonList, saveThemeJsonData } from "../../../redux/Actions";
 import { useDispatch, useSelector } from "react-redux/es/exports";
 import { ApiServiceContext } from "../../../../core/Api/api.service";
+import { toast } from "react-toastify";
 
 function SectionThemeOneEditor() {
   const [editedHeaderData, setHeaderJsonData] = useState<any>();
@@ -48,7 +49,14 @@ function SectionThemeOneEditor() {
   };
 
   const saveHeaderJsonDataToFile = () => {
-    save_cms_data(editedHeaderData);
+    if(!editedHeaderData?.theme_1?.home?.header?.secondary_color.length && !editedHeaderData?.theme_1?.home?.header?.primary_color.length ){
+      toast("Please slect the colors ")
+    }else{
+      save_cms_data(editedHeaderData);
+      console.log("check",editedHeaderData?.theme_1?.home?.section_1?.is_section_enable)
+
+    }
+    
   };
 
   useEffect(() => {

@@ -3,12 +3,17 @@ import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux/es/exports";
 import { toast, ToastContainer } from "react-toastify";
-import { signInWithPopup, FacebookAuthProvider, GoogleAuthProvider} from "firebase/auth";
+import {
+  signInWithPopup,
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+} from "firebase/auth";
 import { fbicon, gicon, topimage } from "../../../assets/img";
 import { auth, provider } from "../../../config/firebase";
 import { getUserDetails, setUserdetails } from "../../../redux/Actions";
 import { ApiServiceContext } from "../../../core/Api/api.service";
 import { end_points } from "../../../core/end_points/end_points";
+import { passwordRegex } from "../../../utility";
 
 // const base_url = process?.env?.REACT_APP_BACKEND_URL;
 // const client_base_url = process?.env?.REACT_APP_BASE_URL;
@@ -295,31 +300,37 @@ function Login() {
       terms_and_condition_accept: "",
     };
     if (!values.email) {
-      errors.email = "Email is required";
+      errors.email = "Email is required!";
     } else if (!EMAIL_REGEX.test(values.email)) {
-      errors.email = "Email ID format is invalid";
+      errors.email = "Email ID format is invalid!";
     }
 
     if (!values.password) {
-      errors.password = "Password is required";
+      errors.password = "Password is required!";
+    }
+    if (values.password) {
+      if (!passwordRegex.test(values.password)) {
+        errors.password =
+          "Strong password is required!(It contains one upperCase,one LowerCase,one Number,one Special Charcter,minimum 6 character)";
+      }
     }
     if (!values.name) {
-      errors.name = "Name is required";
+      errors.name = "Name is required!";
     } else if (!NAME_REGEX.test(values.name)) {
       errors.name = "Name is not valid";
     }
     if (values.name.length > 50) {
-      errors.name = "Name should be less than 50 characters";
+      errors.name = "Name should be less than 50 characters!";
     }
     if (!values.mobile_number) {
-      errors.mobile_number = "Mobile number is required";
+      errors.mobile_number = "Mobile number is required!";
     } else if (!PHONE_REGEX.test(values.mobile_number)) {
-      errors.mobile_number = "Mobile number format is invalid";
+      errors.mobile_number = "Mobile number format is invalid!";
     }
 
     if (!values.terms_and_condition_accept === true) {
       errors.terms_and_condition_accept =
-        "Please accept the terms and conditions";
+        "Please accept the terms and conditions!";
     }
     return errors;
   };
@@ -351,7 +362,7 @@ function Login() {
     const userUid = event.user.uid;
     const is_social_login = event.is_social_login;
 
-    // const base_url = 'https://api.bestatservices.com';
+    // const base_url = 'https://api.bestatrestaurant.com';
     // const headers = {
     //   Accept: "application/json",
     // };
@@ -364,10 +375,9 @@ function Login() {
       };
       const response = await postData(end_points.login.url, payload);
 
-   
       if (response) {
         if (response.data === "-1") {
-            console.error("Login API error:", response);
+          console.error("Login API error:", response);
 
           toast(response.data.message);
           // notify(response.data.Response.response_message)
@@ -384,22 +394,28 @@ function Login() {
         if (isFromCheckout) {
           navigate("/checkout");
         } else {
-            navigate("/");
-            window.location.reload();
-          }
+          navigate("/");
+          window.location.reload();
         }
-      
-
-
+      }
     } catch (error) {}
   };
 
   const order_type: any = useSelector<any>((state) => state?.orderType);
 
   const handleRegistrationSubmit = async (event: any) => {
-
     event.preventDefault();
     setFormErrors(validate(formValues));
+    let validateValue = validate(formValues);
+    let details = Object.values(validateValue).map((val) => {
+      return val == "" ? true : false;
+    });
+    let valid = details.every((val) => val === true);
+    // console.log(validateValue, details, valid, "passwordValidation");
+
+    if (!valid) {
+      return;
+    }
     if (regError) {
       return;
     }
@@ -617,8 +633,8 @@ function Login() {
                               <i
                                 className={
                                   registerPasswordType == "text"
-                                    ? "fas fa-eye-slash"
-                                    : "far fa-eye"
+                                    ? "far fa-eye"
+                                    : "fas fa-eye-slash"
                                 }
                               ></i>
                             </button>
@@ -689,7 +705,10 @@ function Login() {
                             </button>
                           </div>
                           <div className="text-center dont-have mt-3">
-                          Already have an account? <NavLink className="forgot-link mb-0" to={"/login"}>Login</NavLink>
+                            Already have an account?{" "}
+                            <NavLink className="forgot-link mb-0" to={"/login"}>
+                              Login
+                            </NavLink>
                           </div>
                           <div className="form-group hidden d-none">
                             <label> </label>

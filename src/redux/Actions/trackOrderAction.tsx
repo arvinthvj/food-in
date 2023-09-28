@@ -14,7 +14,7 @@ export const resetState = (payload?: any) => ({
 });
 
 export const fetchTrackOrder = (value: string) => async (dispatch: any) => {
-  const base_url = "https://api.bestatservices.com";
+  const base_url = "https://api.bestatrestaurant.com";
   try {
     const bodyFormData = new FormData();
     bodyFormData.append("order_id", value);

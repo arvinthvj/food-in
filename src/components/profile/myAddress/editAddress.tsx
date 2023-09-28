@@ -34,7 +34,7 @@ function EditAddress() {
 
   const rand = Math.random();
 
-  const base_url = "https://api.bestatservices.com";
+  const base_url = "https://api.bestatrestaurant.com";
   // const base_url = "http://www.bestatlaundry.test";
 
   const token = localStorage.getItem("token");

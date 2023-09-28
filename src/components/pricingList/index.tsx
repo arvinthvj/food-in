@@ -4,7 +4,7 @@ import axios from "axios";
 import "./pricingList.css";
 
 // import pricingList from './pricingList';
-const base_url = "https://api.bestatservices.com";
+const base_url = "https://api.bestatrestaurant.com";
 
 const priceListData = {
   data: {

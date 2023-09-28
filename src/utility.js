@@ -17,3 +17,6 @@ const removeDuplicates = (arr, type) =>
   arr.filter((v, i, a) => a.findIndex((v2) => v2[type] === v[type]) === i);
 
 export { setLocalValue, getLocalValue, removeDuplicates };
+
+export const passwordRegex =
+  /^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*()_+\-=[\]{}|;:'",.<>?/])(?=.*\d).{6,16}$/;

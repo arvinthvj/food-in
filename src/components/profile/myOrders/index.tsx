@@ -287,7 +287,7 @@ function MyOrders() {
               </div>
             </div>
             <div className="col-lg-7 col-xl-9">
-              {myOrderList &&
+              {myOrderList?.orders_list?.length > 0 ? (
                 myOrderList?.orders_list?.map((item: any, index: any) => {
                   return (
                     <>
@@ -425,8 +425,8 @@ function MyOrders() {
                       </div>
                     </>
                   );
-                })}
-              {myOrderList?.length === 0 && (
+                })
+              ) : (
                 <div className="row">
                   <div className="col-md-12">
                     <div className="res-not-found text-center">
@@ -440,7 +440,7 @@ function MyOrders() {
               )}
             </div>
           </div>
-          {myOrderList?.length !== 0 && (
+          {myOrderList?.orders_list?.length > 0 && (
             <div className="row d-none">
               <div className="col-md-12 pagination_myorder">
                 <nav className="myorder-pagination">

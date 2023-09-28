@@ -36,9 +36,8 @@ export const saveThemeJsonData = (jsonData: any) => async (dispatch: any) => {
   dispatch(setHomeJsonList(jsonData));
 };
 
-
 export const fetchPostalCodes = (response: any) => async (dispatch: any) => {
-  // const base_url = "https://api.bestatservices.com";
+  // const base_url = "https://api.bestatrestaurant.com";
   try {
     if (response) {
       dispatch(setPostalCodeList(response.data.data));
@@ -50,11 +49,8 @@ export const fetchPostalCodes = (response: any) => async (dispatch: any) => {
   } catch (error) {}
 };
 
-
-
-
 export const readNotification = (id: number) => async (dispatch: any) => {
-  const base_url = "https://api.bestatservices.com";
+  const base_url = "https://api.bestatrestaurant.com";
 
   const token = localStorage.getItem("token");
 
@@ -76,7 +72,7 @@ export const readNotification = (id: number) => async (dispatch: any) => {
 };
 
 export const deleteProfile = () => async (dispatch: any) => {
-  const base_url = "https://api.bestatservices.com";
+  const base_url = "https://api.bestatrestaurant.com";
 
   const token = localStorage.getItem("token");
 

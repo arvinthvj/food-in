@@ -158,7 +158,7 @@ export const setSplitPriceDetails = (payload: any) => ({
 });
 
 export const fetchGenarateOrderLink = () => async (dispatch: any) => {
-  const base_url = "https://api.bestatservices.com";
+  const base_url = "https://api.bestatrestaurant.com";
 
   try {
     const token = localStorage.getItem("token");
@@ -184,7 +184,7 @@ export const fetchGenarateOrderLink = () => async (dispatch: any) => {
 
 export const fetchAddressByPincode = () => async (dispatch: any) => {
   // const base_url =
-  //  'https://api.bestatservices.com';
+  //  'https://api.bestatrestaurant.com';
 
   try {
     // const bodyFormData = new FormData();
@@ -212,7 +212,7 @@ export const fetchAddressByPincode = () => async (dispatch: any) => {
 };
 
 export const fetchPickupAdress = () => async (dispatch: any) => {
-  // const base_url = 'https://api.bestatservices.com';
+  // const base_url = 'https://api.bestatrestaurant.com';
 
   try {
     // const bodyFormData = new FormData();
@@ -238,7 +238,7 @@ export const fetchPickupAdress = () => async (dispatch: any) => {
 };
 
 export const fetchPickupDates = () => async (dispatch: any) => {
-  const base_url = "https://api.bestatservices.com";
+  const base_url = "https://api.bestatrestaurant.com";
   try {
     // const bodyFormData = new FormData();
     // bodyFormData.append('limit', limit);
@@ -269,7 +269,7 @@ export const fetchPickupDates = () => async (dispatch: any) => {
 
 export const fetchPickupTimeSlotsDeliveryDates =
   (selectedPickupDate?: any) => async (dispatch: any) => {
-    const base_url = "https://api.bestatservices.com";
+    const base_url = "https://api.bestatrestaurant.com";
     try {
       // const bodyFormData = new FormData();
       // bodyFormData.append('limit', limit);
@@ -304,7 +304,7 @@ export const fetchPickupTimeSlotsDeliveryDates =
 
 export const fetchDeliveryTimeSlots =
   (pickUpTime?: string, deliveryDate?: string) => async (dispatch: any) => {
-    const base_url = "https://api.bestatservices.com";
+    const base_url = "https://api.bestatrestaurant.com";
 
     try {
       // const bodyFormData = new FormData();
@@ -348,7 +348,7 @@ export const fetchGetShopByPinCode =
   };
 
 export const fetchPaymentMethods = () => async (dispatch: any) => {
-  const base_url = "https://api.bestatservices.com";
+  const base_url = "https://api.bestatrestaurant.com";
   const token = localStorage.getItem("token");
   try {
     const response = await axios({
@@ -369,7 +369,7 @@ export const fetchPaymentMethods = () => async (dispatch: any) => {
 };
 
 export const fetchOfferDetailsList = () => async (dispatch: any) => {
-  const base_url = "https://api.bestatservices.com";
+  const base_url = "https://api.bestatrestaurant.com";
   const token = localStorage.getItem("token");
   const shop_id = localStorage.getItem("shop_id");
   let totalCartPrice = JSON.parse(localStorage.getItem("payload") || "");
@@ -392,7 +392,7 @@ export const fetchOfferDetailsList = () => async (dispatch: any) => {
 };
 
 export const fetchSaveAddress = (payloadData: any) => async (dispatch: any) => {
-  const base_url = "https://api.bestatservices.com";
+  const base_url = "https://api.bestatrestaurant.com";
   const token = localStorage.getItem("token");
   try {
     const response = await axios({
@@ -421,7 +421,7 @@ export const fetchSaveAddress = (payloadData: any) => async (dispatch: any) => {
 
 export const fetchUpdateAddress =
   (payloadUpdateData: any) => async (dispatch: any) => {
-    const base_url = "https://api.bestatservices.com";
+    const base_url = "https://api.bestatrestaurant.com";
     const token = localStorage.getItem("token");
     try {
       const response = await axios({
@@ -443,7 +443,7 @@ export const fetchUpdateAddress =
 
 export const fetchCreateSetUpIntent =
   (cardStatus: any) => async (dispatch: any) => {
-    const base_url = "https://api.bestatservices.com";
+    const base_url = "https://api.bestatrestaurant.com";
     const token = localStorage.getItem("token");
     try {
       const response = await axios({
@@ -473,7 +473,7 @@ export const fetchCreateSetUpIntent =
 
 export const fetchSubmitOrder =
   (payloadSubmitData: any) => async (dispatch: any) => {
-    const base_url = "https://api.bestatservices.com";
+    const base_url = "https://api.bestatrestaurant.com";
     const token = localStorage.getItem("token");
     const notify = (message: string) => toast(message);
     try {
@@ -527,7 +527,7 @@ export const fetchSubmitOrder =
   };
 
 export const fetchListSavedCards = () => async (dispatch: any) => {
-  const base_url = "https://api.bestatservices.com";
+  const base_url = "https://api.bestatrestaurant.com";
   const token = localStorage.getItem("token");
   try {
     const response = await axios({
@@ -552,7 +552,7 @@ export const fetchListSavedCards = () => async (dispatch: any) => {
 export const fetchPickupDelivery =
   (order_type: any, shop_id: any) => async (dispatch: any) => {
     let token = localStorage.getItem("token");
-    const base_url = "https://api.bestatservices.com";
+    const base_url = "https://api.bestatrestaurant.com";
     //  const order_type = payload.order_type
     //  const shop_id = payload.shop_id
     //  const total_processing_hours = payload.process_time_1_1_1
@@ -604,7 +604,7 @@ export const fetchPickupDelivery =
 export const fetchCompleteOrderData =
   (completeOrderId: any) => async (dispatch: any) => {
     let token = localStorage.getItem("token");
-    const base_url = "https://api.bestatservices.com";
+    const base_url = "https://api.bestatrestaurant.com";
     try {
       const response = await axios({
         method: "get",
@@ -627,7 +627,7 @@ export const fetchCompleteOrderData =
   };
 
 export const fetchReferralData = () => async (dispatch: any) => {
-  const base_url = "https://api.bestatservices.com";
+  const base_url = "https://api.bestatrestaurant.com";
   const token = localStorage.getItem("token");
   let totalCartPrice = JSON.parse(localStorage.getItem("payload") || "");
   try {

@@ -19,6 +19,8 @@ const SectionOneEditThemeOne = () => {
   const [showCropModal, setShowCropModal] = useState<boolean>(false);
   const [imagedata, setImagedata] = useState<any>("" || undefined);
   const [activeTab, setActiveTab] = useState(0);
+  const [savedData, setSavedData] = useState<any>(); 
+
   const banner = [
     "assets/img/menu-banner.jpg",
     "assets/img/about-image.jpg",
@@ -31,6 +33,8 @@ const SectionOneEditThemeOne = () => {
   ];
   useEffect(() => {
     setEditData(jsonData);
+    setSavedData(jsonData)
+
   }, [jsonData]);
   useEffect(() => {
     if (editData != undefined) {
@@ -90,6 +94,13 @@ const SectionOneEditThemeOne = () => {
       handleImageChange(imageLink, activeTab);
     }
   };
+
+  const handleClose=()=>{
+    setEditData(savedData);
+
+  }
+
+  console.log("jsondata", jsonData, editData, save_cms_data)
   // HTML
   return (
     <>
@@ -102,6 +113,7 @@ const SectionOneEditThemeOne = () => {
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              onClick={handleClose}
             ></button>
           </div>
           <div className="modal-content modal-body">

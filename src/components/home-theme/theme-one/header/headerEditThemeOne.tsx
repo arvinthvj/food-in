@@ -9,9 +9,13 @@ const HeaderEditThemeOne = () => {
   const jsonData: any = useSelector<any>((state) => state.homeJsonList);
   const [editData, setEditData] = useState<any>();
   const { save_cms_data } = useContext(ApiServiceContext);
+  const [savedData, setSavedData] = useState<any>(); 
+
 
   useEffect(() => {
     setEditData(jsonData);
+    setSavedData(jsonData)
+
   }, [jsonData]);
   useEffect(() => {
     if (editData != undefined) {
@@ -52,6 +56,12 @@ const HeaderEditThemeOne = () => {
       },
     }));
   };
+
+  
+  const handleClose=()=>{
+    setEditData(savedData);
+
+  }
   // HTML
   return (
     <>
@@ -64,6 +74,7 @@ const HeaderEditThemeOne = () => {
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              onClick={handleClose}
             ></button>
           </div>
           <div className="modal-content modal-body">

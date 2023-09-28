@@ -62,6 +62,9 @@ const ProductLists = () => {
   const splitAmountDetails: any = useSelector<any>(
     (state) => state?.splitPriceDetails
   );
+  const cartFinalTotal = splitAmountDetails?.cart_final_total
+    ? splitAmountDetails?.cart_final_total
+    : 0;
   // -----------------------Repeat order ---=-==-=-==-=-=--=-=-=--=-=-=-=-=
   const repeatOrderData = async (id: any = "100") => {
     let payload = { order_id: id };
@@ -84,7 +87,8 @@ const ProductLists = () => {
               "REORDER",
               val?.add_on_groups || [],
               val?.notes,
-              val?.qty
+              val?.qty,
+              val
             );
           }, i * 100);
         }
@@ -96,9 +100,15 @@ const ProductLists = () => {
       // });
     }
   };
-  // useEffect(() => {
-  //   repeatOrderData("100");
-  // }, []);
+  useEffect(() => {
+    // repeatOrderData("100");
+    console.log(
+      parseInt(cartFinalTotal) < parseInt(minimum_order_amount),
+      "valued",
+      parseInt(cartFinalTotal),
+      parseInt(minimum_order_amount)
+    );
+  }, [cartFinalTotal]);
   // ----------------------------------------------------------------------------
   let CardInfoList = getLocalValue("cartInformationData", []);
 
@@ -125,7 +135,7 @@ const ProductLists = () => {
   };
 
   useEffect(() => {
-    if (cartInformation.length > 0) {
+    if (cartInformation.length >= 0) {
       let finalTotalPrice = 0;
       let itemsCount = 0;
 
@@ -400,94 +410,11 @@ const ProductLists = () => {
     type: any,
     extra: any,
     instructionValue: any,
-    count: any = 0
+    count: any = 0,
+    reorderDetails: any = []
   ) => {
     console.count("click");
-    console.log(type, productCategories, "click");
-    const selectedCategoryItem: any = productCategories?.find(
-      (item: any) => item?.category_id == selectedMainCategoryId.toString()
-    );
-
-    const getSubCategory =
-      selectedCategoryItem?.subcategories[0]?.products?.find(
-        (item: any) => item?.id == selectedSubCategoryId
-      );
-
-    const quantity = getSubCategory?.quantity ? getSubCategory?.quantity : 0;
-    let updatedQuantity = parseInt(quantity ? quantity : 0);
-    if (type === "customize") {
-      if (updatedQuantity == 0) {
-        updatedQuantity = updatedQuantity + 1;
-        dispatch(setCartCount(cartCount + 1));
-      } else {
-        updatedQuantity = updatedQuantity;
-        dispatch(setCartCount(cartCount));
-      }
-    } else if (type === "REORDER") {
-      updatedQuantity = count;
-      dispatch(setCartCount(cartCount));
-    } else if (type === "delete") {
-      updatedQuantity = 0;
-      dispatch(deleteCartCount(1));
-    } else if (type === "clear") {
-      updatedQuantity = 0;
-      dispatch(deleteCartCount(0));
-      dispatch(setCartCount(0));
-    } else if (type === "minus") {
-      updatedQuantity = updatedQuantity > 0 ? updatedQuantity - 1 : 0;
-      dispatch(deleteCartCount(1));
-    } else {
-      updatedQuantity = updatedQuantity + 1;
-      dispatch(setCartCount(cartCount + 1));
-    }
-
-    const add_on_groups_data =
-      getSubCategory?.add_on_groups[0]?.add_ons?.length > 0
-        ? getSubCategory?.add_on_groups[0]?.add_ons?.map((val: any) => {
-            let Vid = val.id;
-            let updatedVal = val; // Store the original value in a variable to preserve other properties
-
-            extra?.map((v: any) => {
-              if (v.id == Vid) {
-                updatedVal = { ...val, check: v?.value };
-              }
-              return v; // Return the value for the inner map
-            });
-
-            return updatedVal; // Return the updated value for the outer map
-          })
-        : [];
-    const updatedSubCategory = {
-      ...getSubCategory,
-      quantity: updatedQuantity.toString(),
-      instructionnote: instructionValue
-        ? instructionValue
-        : getSubCategory?.instructionnote,
-      add_on_groups: [
-        {
-          ...getSubCategory?.add_on_groups[0],
-          add_ons: add_on_groups_data,
-        },
-      ],
-    };
-
-    const updatedSubCategoriesList =
-      selectedCategoryItem?.subcategories[0]?.products?.map((item: any) => {
-        if (item.id == selectedSubCategoryId) {
-          return updatedSubCategory;
-        }
-        return item;
-      });
-
-    const updatedCategory = {
-      ...selectedCategoryItem,
-      subcategories: [
-        {
-          ...selectedCategoryItem?.subcategories[0],
-          products: updatedSubCategoriesList,
-        },
-      ],
-    };
+    console.log(type, productCategories, extra, "click");
 
     setProductCategories((prev: any) => {
       const mainData = prev?.length > 0 ? [...prev] : productCategories;
@@ -536,7 +463,10 @@ const ProductLists = () => {
               let updatedVal = val;
               extra?.map((v: any) => {
                 if (v.id == Vid) {
-                  updatedVal = { ...val, check: v?.value };
+                  updatedVal = {
+                    ...val,
+                    check: type === "REORDER" ? v?.check : v?.value,
+                  };
                 }
                 return v;
               });
@@ -550,12 +480,23 @@ const ProductLists = () => {
         instructionnote: instructionValue
           ? instructionValue
           : getSubCategory?.instructionnote,
-        add_on_groups: [
-          {
-            ...getSubCategory?.add_on_groups[0],
-            add_ons: add_on_groups_data,
-          },
-        ],
+        add_on_groups:
+          type === "REORDER"
+            ? extra
+            : [
+                {
+                  ...getSubCategory?.add_on_groups[0],
+                  add_ons: add_on_groups_data,
+                },
+              ],
+        options:
+          type === "REORDER"
+            ? reorderDetails?.options
+            : getSubCategory?.options,
+        price:
+          type === "REORDER"
+            ? reorderDetails?.total_item_price
+            : getSubCategory?.price,
       };
 
       const updatedSubCategoriesList =
@@ -752,8 +693,11 @@ const ProductLists = () => {
           <div className="row align-items-center">
             <div className="menu-heading col-lg-7">
               <h2>
-                {settings &&
-                  settings?.info?.name + " " + settings?.info?.description}
+                {settings && settings?.info?.name
+                  ? settings?.info?.name
+                  : "" + " " + settings?.info?.description
+                  ? settings?.info?.description
+                  : ""}
               </h2>
               <p className="res-sub-title">
                 <span>
@@ -1304,7 +1248,7 @@ const ProductLists = () => {
                             {/* {settings?.WebmasterSettings?.currency}{" "}
                             {selectedcategoryPriceList?.final_payable_amount} */}
                             {splitAmountDetails?.currency_symbol}{" "}
-                            {splitAmountDetails?.cart_final_total}
+                            {cartFinalTotal}
                           </div>
                         </div>
                       </div>
@@ -1326,20 +1270,29 @@ const ProductLists = () => {
                       <button
                         type="submit"
                         id="submit-btn"
-                        className="continue-btn hover-btn center-block"
+                        className={`continue-btn ${
+                          parseInt(cartFinalTotal) <
+                          parseInt(minimum_order_amount)
+                            ? "hover-btn"
+                            : ""
+                        } center-block`}
                         // disabled={selectedcategoryPriceList?.itemsCount === 0}
                         disabled={
-                          parseInt(splitAmountDetails?.cart_final_total) <
+                          parseInt(cartFinalTotal) <
                           parseInt(minimum_order_amount)
                             ? true
                             : false
                         }
-                        onClick={handleContinue}
+                        onClick={
+                          parseInt(cartFinalTotal) <
+                          parseInt(minimum_order_amount)
+                            ? () => {}
+                            : handleContinue
+                        }
                       >
                         Checkout{" "}
                         <span className="option-total total-amt">
-                          {splitAmountDetails?.currency_symbol}{" "}
-                          {splitAmountDetails?.cart_final_total}
+                          {splitAmountDetails?.currency_symbol} {cartFinalTotal}
                         </span>
                       </button>
                     </div>

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux/es/exports";
 import { readNotification } from "../../../redux/Actions";
 import { end_points } from "../../../core/end_points/end_points";
 import { ApiServiceContext } from "../../../core/Api/api.service";
-import { breadcrumbbg} from '../../../assets/img';
+import { breadcrumbbg } from "../../../assets/img";
 
 function AllNotifications() {
   const { getData } = useContext(ApiServiceContext);
@@ -18,7 +18,7 @@ function AllNotifications() {
 
   const token = localStorage.getItem("token");
 
-  // const base_url = 'https://api.bestatservices.com';
+  // const base_url = 'https://api.bestatrestaurant.com';
 
   const notificationListData = async () => {
     const response = await getData(end_points.userNotificationListApi.url);
@@ -74,7 +74,10 @@ function AllNotifications() {
 
   return (
     <div>
-      <div className="breadcrumpset" style={{ backgroundImage: `url(${breadcrumbbg})` }}>
+      <div
+        className="breadcrumpset"
+        style={{ backgroundImage: `url(${breadcrumbbg})` }}
+      >
         <div className="container">
           <div className="row">
             <div className="col-12">
@@ -82,7 +85,7 @@ function AllNotifications() {
                 <h2>Notifications</h2>
                 <ul>
                   <li>
-                  <a href="/">Home</a>
+                    <a href="/">Home</a>
                   </li>
                   <li>
                     <span>Notifications</span>

@@ -29,6 +29,7 @@ import { setOrderInformation } from "../../redux/Actions/splitPriceAction";
 
 import { acceptablepayment } from "../../assets/img";
 import { CLEAR_ORDER_DETAILS } from "../../redux/Actions/orderDetailsAction";
+import { SpinnerContext } from "../../shared/shared.module";
 const schema = yup.object().shape({
   register_name: yup.string().required("Name is required"),
   register_email: yup
@@ -85,6 +86,7 @@ const ExistingUserschema = yup.object().shape({
 const CheckOut = () => {
   const { postData, getData } = useContext(ApiServiceContext);
   const shopId = localStorage.getItem("shop_id");
+  const { showLoader, hideLoader } = useContext(SpinnerContext);
 
   // const notify = (message: string) => toast(message);
 
@@ -106,12 +108,15 @@ const CheckOut = () => {
     response: {},
     success: false,
   });
+  const logged_user: any = getLocalValue("logged_user", false);
   const [userAddress, setUserAddress] = useState("");
   const stripePromise =
     payDetails &&
     loadStripe(
-      payDetails.payment_methods.stripe_key
+      payDetails?.payment_methods?.stripe_key
         ? payDetails?.payment_methods?.stripe_key
+        : payDetails?.payment_key
+        ? payDetails.payment_key
         : ""
     );
   let postalCode: any = getLocalValue("postalCode", "");
@@ -134,10 +139,12 @@ const CheckOut = () => {
   const splitAmountDetail: any = useSelector<any>(
     (state) => state?.splitPriceDetails
   );
+  const settings: any = useSelector<any>(
+    (state) => state?.settings?.payment_settings
+  );
 
   const orderNote: any = useSelector<any>((state) => state?.ordernote);
   const userDetails: any = getLocalValue("userDetails", []);
-  const logged_user: any = getLocalValue("logged_user", false);
   const isToken: any = localStorage.getItem("token")
     ? localStorage.getItem("token")
     : null;
@@ -210,8 +217,7 @@ const CheckOut = () => {
     getValues("paymentType") === "credit" ? true : false
   );
 
-  useEffect(() => {
-  }, [getValues()]);
+  useEffect(() => {}, [getValues()]);
   const cardItem = useMemo(() => {
     if (cartInformation?.length > 0) {
       return cartInformation.map((val: any) => {
@@ -242,8 +248,7 @@ const CheckOut = () => {
     }
     return [];
   }, [cartInformation]);
-  useEffect(() => {
-  }, [cartInformationorderList]);
+  useEffect(() => {}, [cartInformationorderList]);
 
   useEffect(() => {
     if (cartInformation.length > 0) {
@@ -267,8 +272,10 @@ const CheckOut = () => {
         return;
       }
       setLoading(true);
+      showLoader();
       if (selectedItem == null && data?.register_address == "") {
         setLoading(false);
+        hideLoader();
         toast.error("please enter the delivery address ");
         setNewAddress(true);
 
@@ -370,6 +377,8 @@ const CheckOut = () => {
         const response = await postData(end_points.submitOrderApi.url, payload);
         if (response.data.code === "200") {
           setLoading(false);
+          hideLoader();
+
           dispatch(clearUserOrderInfoCategories);
           dispatch({ type: CLEAR_ORDER_DETAILS });
           clearOrders();
@@ -379,12 +388,19 @@ const CheckOut = () => {
           setPaymentSubmitted(false);
           // navigate("/productLists")
         } else {
-          toast.error(response.data.message);
+          console.log(response, "response");
+
+          toast.error(
+            response?.response?.data.message ||
+              response?.data?.error?.internal_message
+          );
         }
       }
     } catch (err) {
       console.log(err);
     } finally {
+      console.count("dataSubmit");
+
       setLoading(false);
     }
   };
@@ -420,11 +436,16 @@ const CheckOut = () => {
     }
   };
   useEffect(() => {
+    // console.log(logged_user, "logged_user", settings);
+
+    if (!logged_user && !ValidToken && settings) {
+      settings && setPayDetails(settings);
+    }
     if (logged_user && ValidToken) {
       paymentDetails();
       addressDataList();
     }
-  }, [logged_user, ValidToken]);
+  }, [logged_user, ValidToken, settings]);
   useEffect(() => {
     timeDataList();
   }, []);
@@ -439,10 +460,8 @@ const CheckOut = () => {
       useAddressDetails(id);
     }
   }, []);
-  useEffect(() => {
-  }, [timeSlot]);
-  useEffect(() => {
-  }, [selectedItem]);
+  useEffect(() => {}, [timeSlot]);
+  useEffect(() => {}, [selectedItem]);
   //============================================================================//
 
   const saveAddress: any = useSelector<any>((state) => state?.saveAddress.data);
@@ -485,8 +504,7 @@ const CheckOut = () => {
     }
   }, [cartInformationorderList]);
 
-  useEffect(() => {
-  }, [paymentSuccess]);
+  useEffect(() => {}, [paymentSuccess]);
 
   return (
     <div>
@@ -718,7 +736,7 @@ const CheckOut = () => {
                               render={({ field }) => (
                                 <input
                                   type="text"
-                                  readOnly
+                        
                                   className="form-control"
                                   placeholder={postalCode}
                                   {...field}
@@ -1006,9 +1024,7 @@ const CheckOut = () => {
                           disabled={loading}
                           ref={payConfirmationSubmitRef}
                         >
-                          {paymentSuccess.success === true
-                            ? "Place Order"
-                            : "Place Order"}
+                          Place Order
                         </button>
                       </div>
                     </div>

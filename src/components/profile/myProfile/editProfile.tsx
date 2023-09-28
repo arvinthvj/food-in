@@ -267,7 +267,7 @@ function EditProfile() {
                           ? image
                           : profileData?.profile_image
                           ? `${profileData.profile_image}?bust=${rand}`
-                          : "https://shop.bestatservices.com/customer/img/default-user.png"
+                          : "https://shop.bestatrestaurant.com/customer/img/default-user.png"
                       }
                       alt=""
                       width="80"
@@ -297,7 +297,7 @@ function EditProfile() {
 
                     {((profileData?.profile_image &&
                       profileData?.profile_image !==
-                        "https://shop.bestatservices.com/customer/img/default-user.png") ||
+                        "https://shop.bestatrestaurant.com/customer/img/default-user.png") ||
                       Boolean(image)) && (
                       <button
                         type="button"

@@ -10,7 +10,7 @@ export const setAddToCart = (payload: any) => ({
 export const fetchAddToCart = (payload: any) => async (dispatch: any) => {
   localStorage.setItem("payload", JSON.stringify(payload));
   const base_url = "";
-  // 'https://api.bestatservices.com';
+  // 'https://api.bestatrestaurant.com';
 
   try {
     const bodyFormData = new FormData();

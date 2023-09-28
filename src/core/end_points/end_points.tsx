@@ -45,7 +45,6 @@ const myOrdersApi = { url: "profile/my_orders", service: "" };
 //order details
 const orderDetailsApi = { url: "profile/my_orders/order_summary", service: "" };
 
-
 // profile details
 const profileDataApi = { url: "my_profile", service: "" };
 const locationfetchAPi = { url: "get_postal_codes", service: "" };
@@ -61,7 +60,8 @@ const updateChangedPasswordApi = {
   url: "profile/change_password",
   service: "",
 };
-
+// privacy terms and cookiee conditions api
+const PolicyApi = { url: "sitepage", service: "" };
 // profile/my_addresses/update
 
 // profile_update
@@ -99,6 +99,6 @@ export const end_points: Record<string, EndPoint> = {
   updateChangedPasswordApi,
   deleteProfileApi,
   locationfetchAPi,
-  
+  PolicyApi,
   repeatOrderApi,
 };

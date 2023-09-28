@@ -13,7 +13,7 @@ export const setShopsBasedonArea = (payload: any) => ({
 });
 
 export const fetchShopHomeData = () => async (dispatch: any) => {
-  const base_url = "https://api.bestatservices.com";
+  const base_url = "https://api.bestatrestaurant.com";
   const currentShopId = localStorage.getItem("currentShopHome");
   try {
     const response = await axios({
@@ -32,7 +32,7 @@ export const fetchShopHomeData = () => async (dispatch: any) => {
 
 export const fetchShopsBasedPincode =
   (area: any, currentCodeValue: any) => async (dispatch: any) => {
-    const base_url = "https://api.bestatservices.com";
+    const base_url = "https://api.bestatrestaurant.com";
     try {
       const response = await axios({
         method: "get",

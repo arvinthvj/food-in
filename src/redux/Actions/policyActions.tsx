@@ -5,7 +5,7 @@ export const SET_ABOUT_US = "SET_ABOUT_US";
 export const SET_TERMS_CONDITIONS = "SET_TERMS_CONDITIONS";
 export const SET_COOKIE_POLICY = "SET_COOKIE_POLICY";
 export const SET_FAQ = "SET_FAQ";
-export const base_url = "https://api.bestatservices.com";
+export const base_url = "https://api.bestatrestaurant.com";
 
 export const setPrivacyPolicy = (payload: any) => ({
   type: SET_PRIVACY_POLICY,
@@ -29,21 +29,21 @@ export const setFaq = (payload: any) => ({
   payload,
 });
 
-export const fetchPrivacyPolicyData = () => async (dispatch: any) => {
-  try {
-    const response = await axios({
-      method: "get",
-      url: `${base_url}/api/sitepage/Privacy`,
-      headers: {
-        Accept: "application/json",
-      },
-    });
-    if (response) {
-      dispatch(setPrivacyPolicy(response.data.data));
-    }
-    return response;
-  } catch (error) {}
-};
+// export const fetchPrivacyPolicyData = () => async (dispatch: any) => {
+//   try {
+//     const response = await axios({
+//       method: "get",
+//       url: `${base_url}/api/sitepage/Privacy`,
+//       headers: {
+//         Accept: "application/json",
+//       },
+//     });
+//     if (response) {
+//       dispatch(setPrivacyPolicy(response.data.data));
+//     }
+//     return response;
+//   } catch (error) {}
+// };
 
 export const fetchAboutUsData = () => async (dispatch: any) => {
   try {
@@ -61,37 +61,37 @@ export const fetchAboutUsData = () => async (dispatch: any) => {
   } catch (error) {}
 };
 
-export const fetchTermsandConditionData = () => async (dispatch: any) => {
-  try {
-    const response = await axios({
-      method: "get",
-      url: `${base_url}/api/sitepage/Terms & Conditions`,
-      headers: {
-        Accept: "application/json",
-      },
-    });
-    if (response) {
-      dispatch(setTermsandCondition(response.data.data));
-    }
-    return response;
-  } catch (error) {}
-};
+// export const fetchTermsandConditionData = () => async (dispatch: any) => {
+// try {
+//   const response = await axios({
+//     method: "post",
+//     url: `${base_url}/api/sitepage`,
+//     headers: {
+//       Accept: "application/json",
+//     },
+//   });
+//   if (response) {
+//     dispatch(setTermsandCondition(response.data.data));
+//   }
+//   return response;
+// } catch (error) {}
+// };
 
-export const fetchCookiePolicyData = () => async (dispatch: any) => {
-  try {
-    const response = await axios({
-      method: "get",
-      url: `${base_url}/api/sitepage/Cookie Policy`,
-      headers: {
-        Accept: "application/json",
-      },
-    });
-    if (response) {
-      dispatch(setCookiePolicy(response.data.data));
-    }
-    return response;
-  } catch (error) {}
-};
+// export const fetchCookiePolicyData = () => async (dispatch: any) => {
+//   try {
+//     const response = await axios({
+//       method: "get",
+//       url: `${base_url}/api/sitepage/Cookie Policy`,
+//       headers: {
+//         Accept: "application/json",
+//       },
+//     });
+//     if (response) {
+//       dispatch(setCookiePolicy(response.data.data));
+//     }
+//     return response;
+//   } catch (error) {}
+// };
 
 export const fetchFaqData = () => async (dispatch: any) => {
   try {

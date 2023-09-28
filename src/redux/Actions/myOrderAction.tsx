@@ -11,7 +11,7 @@ export const setMyOrderList = (payload: any) => ({
 export const fetchMyOrders =
   (limit: number, page: number, sort: number, order_status: string) =>
   async (dispatch: any) => {
-    const base_url = "https://api.bestatservices.com";
+    const base_url = "https://api.bestatrestaurant.com";
     const notify = (message: string) => toast(message);
 
     try {

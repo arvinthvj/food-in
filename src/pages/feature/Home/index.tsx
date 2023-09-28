@@ -6,8 +6,8 @@ import { useDispatch } from "react-redux";
 import HomeThemeOne from "../../../components/home-theme/theme-one";
 
 const Home = () => {
-  const { getData,get_cms_data } = useContext(ApiServiceContext);
-  // 'https://api.bestatservices.com';
+  const { getData, get_cms_data } = useContext(ApiServiceContext);
+  // 'https://api.bestatrestaurant.com';
   const dispatch = useDispatch();
   const [getOffer, setGetOffer] = useState<any>();
   const [offerMessage, setOfferMessage] = useState<any>();
@@ -42,7 +42,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    get_cms_data()
+    get_cms_data();
   }, []);
 
   return (

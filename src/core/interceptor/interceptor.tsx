@@ -8,25 +8,30 @@ export const AxiosContext = createContext<any>({});
 const AxiosProvider = (props: { children: any }) => {
   const axiosInstance: AxiosInstance = axios.create();
   {
-    // ' https://bestatservices.com'
-    // 'https://demo1.bestatservices.com'
-    // '  https://demo2.bestatservices.com
+    // ' https://bestatrestaurant.com'
+    // 'https://demo1.bestatrestaurant.com'
+    // '  https://demo2.bestatrestaurant.com
     // 'deploy urls
     //base urls
-    // demo1 - api.demo1.bestatservices.com
+    // demo1 - api.demo1.bestatrestaurant.com
     // demo2 - api.demo2
   }
   const { showLoader, hideLoader } = useContext(SpinnerContext);
-  const hideLoadersApi: Array<string> = [end_points.priceSplitListApi.url];
+  const hideLoadersApi: Array<string> = [
+    end_points.priceSplitListApi.url,
+    end_points.locationfetchAPi.url,
+  ];
   axiosInstance.interceptors.request.use(
     (config: any) => {
-      if (!hideLoadersApi.includes(config.url)) {
+      const validUrl = config?.url?.split("?")[0]; //config?.url
+
+      if (!hideLoadersApi.includes(validUrl)) {
         showLoader();
       }
       const token = localStorage.getItem("token");
-      // config.baseURL = `https://api.bestatservices.com/api/`;
+      // config.baseURL = `https://api.bestatrestaurant.com/api/`;
       let host = window.location.hostname;
-      let origin = "https://bestatservices.com";
+      let origin = "https://bestatrestaurant.com";
       let domain = "com";
       let companyName = "";
       // "demo2";
@@ -46,8 +51,8 @@ const AxiosProvider = (props: { children: any }) => {
         }
       }
       if (host === "localhost") {
-        config.baseURL = `https://api.bestatservices.${domain}/api/`;
-        // `https://api.${companyName}.bestatservices.${domain}`;
+        config.baseURL = `https://api.bestatrestaurant.${domain}/api/`;
+        // `https://api.${companyName}.bestatrestaurant.${domain}`;
       } else {
         config.baseURL = `https://api.${companyName}.${domain}/api/`;
       }

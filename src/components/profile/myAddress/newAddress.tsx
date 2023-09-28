@@ -7,7 +7,7 @@ import DeleteAddressPopup from "./deleteAddressPopup";
 import { ToastContainer, toast } from "react-toastify";
 import DeleteProfilePopup from "../myProfile/deleteProfilePopup";
 import { useNavigate } from "react-router";
-import { breadcrumbbg} from '../../../assets/img';
+import { breadcrumbbg } from "../../../assets/img";
 import { end_points } from "../../../core/end_points/end_points";
 import { ApiServiceContext } from "../../../core/Api/api.service";
 // const desiredValues = {
@@ -60,7 +60,7 @@ function NewAddress() {
 
   const rand = Math.random();
 
-  const base_url = "https://api.bestatservices.com";
+  const base_url = "https://api.bestatrestaurant.com";
   // const base_url = "http://www.bestatlaundry.test";
 
   const token = localStorage.getItem("token");
@@ -260,7 +260,10 @@ function NewAddress() {
 
   return (
     <div>
-      <div className="breadcrumpset" style={{ backgroundImage: `url(${breadcrumbbg})` }}>
+      <div
+        className="breadcrumpset"
+        style={{ backgroundImage: `url(${breadcrumbbg})` }}
+      >
         <div className="container">
           <div className="row">
             <div className="col-12">
@@ -268,7 +271,7 @@ function NewAddress() {
                 <h2>Manage Address</h2>
                 <ul>
                   <li>
-                  <a href="/">Home</a>
+                    <a href="/">Home</a>
                   </li>
                   <li>
                     <span> Manage Address</span>
