@@ -49,14 +49,8 @@ function SectionThemeOneEditor() {
   };
 
   const saveHeaderJsonDataToFile = () => {
-    if(!editedHeaderData?.theme_1?.home?.header?.secondary_color.length && !editedHeaderData?.theme_1?.home?.header?.primary_color.length ){
-      toast("Please slect the colors ")
-    }else{
       save_cms_data(editedHeaderData);
       console.log("check",editedHeaderData?.theme_1?.home?.section_1?.is_section_enable)
-
-    }
-    
   };
 
   useEffect(() => {
@@ -169,10 +163,27 @@ function SectionThemeOneEditor() {
             <div className="mb-3">
               <button
                 type="submit"
-                data-bs-dismiss="modal"
+                id="themeEditSubmit"
                 className="btn primary-btn"
-                onClick={() => {
-                  saveHeaderJsonDataToFile();
+                onClick={(e) => {
+                  debugger
+
+                  let sectionsArray = editedHeaderData?.theme_1?.home?.sections;
+                  if(sectionsArray && sectionsArray.filter((e:any)=> !e.is_section_enable).length == sectionsArray.length){
+                    toast("Please Select the any of the sections ")
+                    
+                  }
+                  else{
+                    document.querySelector('#themeEditSubmit')?.setAttribute('data-bs-dismiss', 'modal');
+              
+                    // Trigger a click event to hide the modal
+                    document.querySelector('#themeEditSubmit')?.click();
+                    setTimeout(() => {
+                      document.querySelector('#themeEditSubmit')?.removeAttribute('data-bs-dismiss');
+                    }, 100);
+                    saveHeaderJsonDataToFile();
+                  }
+                 
                 }}
               >
                 Save Changes
