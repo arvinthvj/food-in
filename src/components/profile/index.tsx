@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function Profile(close: any) {
   const navigate = useNavigate();
@@ -13,6 +13,9 @@ function Profile(close: any) {
   const [isOpen, setIsOpen] = useState(false);
   const [userName, setUserName] = useState<any>("");
   const popupRef = useRef<any>(null);
+  const location = useLocation();
+  let url = location.pathname;
+  let splitURL = url.toString().split("/");
 
   useEffect(() => {
     if (localStorage.getItem("userDetails")) {
@@ -29,6 +32,9 @@ function Profile(close: any) {
 
       // setUserToken(token);
     } else {
+      if(splitURL[1] == "edit-home"){
+        window.location.reload();
+      }else
       navigate("/login");
     }
   }, []);

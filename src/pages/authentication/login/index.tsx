@@ -221,8 +221,9 @@ function Login() {
 
       // const result = await response.then(response => response);
       if (response) {
+        debugger
         if (response.data.code === "-1") {
-          toast(response.data.message);
+          toast.error(response.data.message);
           // notify(response.data.Response.response_message)
           return;
         }
@@ -230,8 +231,11 @@ function Login() {
         dispatch(getUserDetails(response.data));
         // setLoginResult(response.data);
         localStorage.setItem("token", response.data.data.token);
-        if (response.data.data.token) {
-          localStorage.setItem("remember_token", response.data.data.token);
+        if (keepSigned == true && response.data.data.remember_token) {
+          localStorage.setItem(
+            "remember_token",
+            response.data.data.remember_token
+          );
         }
         const isFromCheckout = localStorage.getItem("isCheckout");
         const isCompleteOrder = localStorage.getItem("isCompleteOrder");
@@ -376,11 +380,10 @@ function Login() {
       const response = await postData(end_points.login.url, payload);
 
       if (response) {
-        if (response.data === "-1") {
+        if (response.data.code == "-1") {
           console.error("Login API error:", response);
+          toast.error(response.data.message);
 
-          toast(response.data.message);
-          // notify(response.data.Response.response_message)
           return;
         }
         // setPostalCodeList(response.data.data[0])
@@ -390,6 +393,7 @@ function Login() {
         if (response.data.data.token) {
           localStorage.setItem("remember_token", response.data.data.token);
         }
+
         const isFromCheckout = localStorage.getItem("isCheckout");
         if (isFromCheckout) {
           navigate("/checkout");
@@ -456,11 +460,12 @@ function Login() {
     setLoginResult({ result: e.data });
 
     if (e.data.code === "200" && e.data.message == "Registered Successfully!") {
-      toast(e.data.message);
+      toast.success(e.data.message);
 
       dispatch(getUserDetails(e.data));
       // setLoginResult(response.data);
       localStorage.setItem("token", e.data.data.token);
+
       const isFromCheckout = localStorage.getItem("isCheckout");
       if (isFromCheckout) {
         window.location.href = `/checkout`;

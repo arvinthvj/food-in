@@ -1,17 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { breadcrumbbg } from "../../assets/img";
-import { SpinnerContext } from "../../shared/shared.module";
-const ContactUs = () => {
-  const { showLoader, hideLoader } = useContext(SpinnerContext);
+import { Spinner } from "react-bootstrap";
+const ContactUs: React.FC = () => {
+  const [loader, setLoader] = useState(false);
 
   const settings: any = useSelector((state) => state?.settings);
+  const handleIframeLoad = () => {
+    setLoader(false);
+  };
   useEffect(() => {
-    showLoader();
-
-    setTimeout(() => {
-      hideLoader();
-    }, 1000);
+    setLoader(true);
   }, []);
   return (
     <>
@@ -106,11 +105,20 @@ const ContactUs = () => {
 
                 <div className="col-md-8">
                   <h4>Location</h4>
+                  {loader === true && (
+                    <div
+                      className="d-flex justify-content-center align-items-center"
+                      style={{ height: "100%" }}
+                    >
+                      <Spinner animation="border" variant="info" />
+                    </div>
+                  )}
                   <section className="google-map p-0">
                     <iframe
                       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2479.492255926633!2d0.06273431632775803!3d51.57754097964681!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTHCsDM0JzM5LjIiTiAwwrAwMyc1My43IkU!5e0!3m2!1sen!2suk!4v1548326172629"
                       width="100%"
                       height="455"
+                      onLoad={handleIframeLoad}
                     ></iframe>
                   </section>
                 </div>

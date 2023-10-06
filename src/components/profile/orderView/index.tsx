@@ -45,8 +45,7 @@ const OrderView: React.FC = () => {
     // fetchData();
     // dispatch(fetchMyOrders(limit,page,sort,order_status))
   }, []);
-  useEffect(() => {
-  }, [orderDetails]);
+  useEffect(() => {}, [orderDetails]);
   const handleLogout = (e: any) => {
     e.preventDefault();
     localStorage.clear();
@@ -322,7 +321,7 @@ const OrderView: React.FC = () => {
                                 {currency_symbol}
                                 {
                                   orderDetails?.properties?.cart_checkout_data
-                                    ?.final_total
+                                    ?.final_total_after_offer
                                 }
                               </strong>
                             </td>

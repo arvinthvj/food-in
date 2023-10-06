@@ -20,6 +20,7 @@ const EditHomeTheme: React.FC = () => {
   const jsonData: any = useSelector<any>((state) => state.homeJsonList);
   const navigate = useNavigate();
   useEffect(() => {
+    localStorage.removeItem("userDetails");
     get_cms_data();
   }, []);
   useEffect(() => {

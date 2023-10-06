@@ -75,17 +75,28 @@ const ProductLists = () => {
       const order: any =
         response?.data?.data?.order?.properties?.cart_checkout_data?.cart_items;
       // );
+
       // category id need to want
-      if (order && order.length > 0) {
+      if (order && order?.length > 0) {
         for (let i = 0; i < order.length; i++) {
           const val = order[i];
+          console.log(val, "orrvderval");
 
+          setExtraDish(
+            val?.add_on_groups?.length > 0
+              ? val?.add_on_groups[0]?.add_ons?.length > 0
+                ? val?.add_on_groups[0]?.add_ons
+                : val?.add_ons
+              : []
+          );
           setTimeout(() => {
             onAddToCartItemHandler(
               val?.product_id,
               val?.category_id,
               "REORDER",
-              val?.add_on_groups || [],
+              val?.add_on_groups?.length > 0
+                ? val?.add_on_groups
+                : val?.add_ons,
               val?.notes,
               val?.qty,
               val
@@ -140,7 +151,7 @@ const ProductLists = () => {
       let itemsCount = 0;
 
       cartInformation?.map((item: any) => {
-        const subcategoryList = item?.subcategories[0].products?.filter(
+        const subcategoryList = item?.subcategories[0]?.products?.filter(
           (subItem: any) => parseInt(subItem.quantity) > 0
         );
         itemsCount = itemsCount + subcategoryList?.length;
@@ -151,13 +162,21 @@ const ProductLists = () => {
         //   );
 
         subcategoryList?.map((subcategory: any) => {
-          let customPrice = subcategory?.add_on_groups[0].add_ons?.filter(
-            (r: any) => r.check === true
+          console.log(
+            subcategory?.add_on_groups?.length,
+            " subcategory?.add_on_groups?.length"
           );
+
+          let customPrice =
+            subcategory?.add_on_groups?.length > 0
+              ? subcategory?.add_on_groups[0]?.add_ons?.filter(
+                  (r: any) => r?.check == true || r?.check == "true"
+                )
+              : 0;
 
           let customPriceTotal = customPrice
             ? customPrice?.reduce(
-                (acc: number, addon: any) => acc + parseFloat(addon.price),
+                (acc: number, addon: any) => acc + parseFloat(addon?.price),
                 0
               )
             : 0;
@@ -325,91 +344,13 @@ const ProductLists = () => {
       )
     );
   };
-  // const onAddToCartItemHandler = (
-  //   selectedSubCategoryId = "0",
-  //   selectedMainCategoryId = "0",
-  //   type: any = "",
-  //   extra: any,
-  //   instructionValue: any = "",
-  //   count = 0
-  // ) => {
-  //   const updateQuantity = (currentQuantity: any, action: any) => {
-  //     if (action === "customize") {
-  //       return currentQuantity === 0 ? 1 : currentQuantity;
-  //     } else if (action === "REORDER") {
-  //       return count;
-  //     } else if (action === "delete" || action === "clear") {
-  //       return 0;
-  //     } else if (action === "minus") {
-  //       return Math.max(currentQuantity - 1, 0);
-  //     } else {
-  //       return currentQuantity + 1;
-  //     }
-  //   };
-
-  //   setProductCategories((prev: any) => {
-  //     const updatedCategories = prev.map((category: any) => {
-  //       if (category?.category_id === selectedMainCategoryId.toString()) {
-  //         const updatedSubcategories =
-  //           category?.subcategories[0]?.products?.map((product: any) => {
-  //             if (product?.id === selectedSubCategoryId) {
-  //               const updatedAddOns = product?.add_on_groups[0]?.add_ons?.map(
-  //                 (addOn: any) => {
-  //                   const extraItem = extra?.find(
-  //                     (item: any) => item.id === addOn.id
-  //                   );
-  //                   if (extraItem) {
-  //                     return { ...addOn, check: extraItem?.value };
-  //                   }
-  //                   return addOn;
-  //                 }
-  //               );
-
-  //               return {
-  //                 ...product,
-  //                 quantity: updateQuantity(
-  //                   product?.quantity ? parseInt(product?.quantity) : 0,
-  //                   type
-  //                 ).toString(),
-  //                 instructionnote: instructionValue
-  //                   ? instructionValue
-  //                   : product?.instructionnote,
-  //                 add_on_groups: [
-  //                   {
-  //                     ...product?.add_on_groups[0],
-  //                     add_ons: updatedAddOns,
-  //                   },
-  //                 ],
-  //               };
-  //             }
-  //             return product;
-  //           });
-
-  //         return {
-  //           ...category,
-  //           subcategories: [
-  //             {
-  //               ...category.subcategories[0],
-  //               products: updatedSubcategories,
-  //             },
-  //           ],
-  //         };
-  //       }
-  //       return category;
-  //     });
-
-  //     return updatedCategories;
-  //   });
-
-  //   setExtraDish([]);
-  // };
 
   const onAddToCartItemHandler = (
     selectedSubCategoryId: any = "0",
     selectedMainCategoryId: any = "0",
-    type: any,
-    extra: any,
-    instructionValue: any,
+    type: any = "",
+    extra: any = [],
+    instructionValue: any = "",
     count: any = 0,
     reorderDetails: any = []
   ) => {
@@ -457,23 +398,46 @@ const ProductLists = () => {
       }
 
       const add_on_groups_data =
-        getSubCategory?.add_on_groups[0]?.add_ons?.length > 0
-          ? getSubCategory?.add_on_groups[0]?.add_ons?.map((val: any) => {
-              let Vid = val.id;
-              let updatedVal = val;
-              extra?.map((v: any) => {
-                if (v.id == Vid) {
-                  updatedVal = {
-                    ...val,
-                    check: type === "REORDER" ? v?.check : v?.value,
-                  };
-                }
-                return v;
-              });
+        getSubCategory?.add_on_groups?.length > 0
+          ? getSubCategory?.add_on_groups[0]?.add_ons?.length > 0
+            ? getSubCategory?.add_on_groups[0]?.add_ons?.map((val: any) => {
+                let Vid = val.id;
+                let updatedVal = val;
+                extra?.map((v: any) => {
+                  if (v?.id == Vid) {
+                    updatedVal = {
+                      ...val,
+                      check: v?.value,
+                    };
+                  }
+                  return v;
+                });
 
-              return updatedVal;
-            })
+                return updatedVal;
+              })
+            : []
           : [];
+      //-------------------------- future usecode
+      // const totalReorderPrice = (optionPrice: any, data: any) => {
+      //   let tot: any = optionPrice;
+      //   let mainData = extra?.add_ons?.length > 0 ? extra : data;
+      //   mainData?.map((val: any) => {
+      //     console.log(
+      //       "validTotal",
+      //       val,
+      //       extra?.length > 0,
+      //       val?.check == true || val?.check == "true"
+      //     );
+      //     if (val?.check == true || val?.check == "true") {
+      //       tot = parseFloat(tot) + parseFloat(val?.price);
+      //     }
+      //     return tot;
+      //   });
+      //   let validTotal = parseFloat(tot).toFixed(2);
+      //   console.log(validTotal, "validTotal");
+
+      //   return validTotal;
+      // };
       const updatedSubCategory = {
         ...getSubCategory,
         quantity: updatedQuantity ? updatedQuantity?.toString() : "0",
@@ -486,7 +450,12 @@ const ProductLists = () => {
             : [
                 {
                   ...getSubCategory?.add_on_groups[0],
-                  add_ons: add_on_groups_data,
+                  add_ons:
+                    type === "REORDER"
+                      ? reorderDetails?.add_on_groups[0]?.add_ons
+                        ? reorderDetails?.add_on_groups[0]?.add_ons
+                        : []
+                      : add_on_groups_data,
                 },
               ],
         options:
@@ -496,7 +465,11 @@ const ProductLists = () => {
         price:
           type === "REORDER"
             ? reorderDetails?.total_item_price
-            : getSubCategory?.price,
+            : // totalReorderPrice(
+              //     reorderDetails?.total_item_price,
+              //     reorderDetails?.add_on_groups[0]?.add_ons
+              //   )
+              getSubCategory?.price,
       };
 
       const updatedSubCategoriesList =
@@ -519,7 +492,7 @@ const ProductLists = () => {
         ],
       };
 
-      console.log(prev, "prev", type === "REORDER" && prev?.length > 0);
+      // console.log(prev, "prev", type === "REORDER" && prev?.length > 0);
 
       let data =
         type === "REORDER" && prev?.length > 0 ? mainData : productCategories;
@@ -532,7 +505,7 @@ const ProductLists = () => {
             ? selectedMainCategoryId?.toString()
             : "0")
         ) {
-          console.log(updatedCategory, "updatedCategory");
+          // console.log(updatedCategory, "updatedCategory");
 
           return updatedCategory;
         }
@@ -540,6 +513,7 @@ const ProductLists = () => {
       });
       return final;
     });
+
     setExtraDish([]);
   };
 
@@ -644,8 +618,8 @@ const ProductLists = () => {
   // useeeffect categories-----
 
   useEffect(() => {
-    console.log(productCategories, "productCategories");
-    console.count("productCategories");
+    // console.log(productCategories, "productCategories");
+    // console.count("productCategories");
     if (productCategories?.length > 0) {
       const cartInformationData = productCategories?.filter((item: any) => {
         return item?.subcategories[0].products?.some(
@@ -673,16 +647,7 @@ const ProductLists = () => {
       }
     }
   }, [productCategories]);
-  // useEffect(() => {
-  //   if (repeatOrderId != "") {
-  //     // dispatch(clearCart());
-  //     // dispatch(clearSplitPrice());
-  //     // cancelOrders();
-  //     // dispatch(clearCartCount());
-  //     repeatOrderData(repeatOrderId);
-  //     localStorage.removeItem("cartInformationData");
-  //   }
-  // }, [repeatOrderId]);
+
   return (
     <div>
       <section
@@ -691,63 +656,81 @@ const ProductLists = () => {
       >
         <div className="container-fluid">
           <div className="row align-items-center">
-            <div className="menu-heading col-lg-7">
-              <h2>
-                {settings && settings?.info?.name
-                  ? settings?.info?.name
-                  : "" + " " + settings?.info?.description
-                  ? settings?.info?.description
-                  : ""}
-              </h2>
-              <p className="res-sub-title">
-                <span>
-                  {settings && settings?.info?.description}
-                  <span> - </span>
-                </span>
-                <span>Sandwich</span>
-              </p>
-              <p className="opening-info">
-                <span className="badge bg-danger">
-                  {" "}
-                  {settings?.info?.online_order_status == "1"
-                    ? "Open"
-                    : "closed"}{" "}
-                </span>{" "}
-                :{" "}
-                {settings?.info?.online_order_status != "1"
-                  ? "You can pre-order for tomorrow."
-                  : "You can order now."}
-              </p>
-            </div>
-            <div className="col-lg-5">
-              <div className="menu-info">
-                <ul>
-                  <li className="menu-button">
-                    <i className="far fa-credit-card menu-icon"></i>{" "}
-                    {settings ? settings?.info?.currency_symbol : "£"}
-                    {settings ? settings?.info?.cost_for_two : "150.00"} for two
-                    people (approx.)
-                  </li>
-                  <li className="menu-button">
-                    <i className="fas fa-biking menu-icon"></i>{" "}
-                    {settings?.info?.minimum_delivery_time
-                      ? settings?.info?.minimum_delivery_time
-                      : "40"}{" "}
-                    -{" "}
-                    {settings?.info?.maximum_delivery_time
-                      ? settings?.info?.maximum_delivery_time
-                      : "60"}{" "}
-                    mins Estimated Delivery
-                  </li>
-                  <li className="menu-button">
-                    <i className="far fa-clock menu-icon"></i>{" "}
-                    {settings?.info?.minimum_delivery_time
-                      ? settings?.info?.minimum_delivery_time
-                      : "40"}{" "}
-                    Estimated Collection
-                  </li>
-                </ul>
+            {settings?.info?.name ? (
+              <div className="menu-heading col-lg-7">
+                <h2>
+                  {settings && settings?.info?.name
+                    ? settings?.info?.name
+                    : "" + " " + settings?.info?.description
+                    ? settings?.info?.description
+                    : ""}
+                </h2>
+                {settings?.info?.description ? (
+                  <p className="res-sub-title">
+                    <span>
+                      {settings?.info?.description}
+                      <span> - </span>
+                    </span>
+                    <span>Sandwich</span>
+                  </p>
+                ) : (
+                  <></>
+                )}
+                <p className="opening-info">
+                  <span
+                    className={`badge ${
+                      settings?.info?.online_order_status == "1"
+                        ? "bg-success"
+                        : "bg-danger"
+                    }`}
+                  >
+                    {" "}
+                    {settings?.info?.online_order_status == "1"
+                      ? "Open"
+                      : "closed"}{" "}
+                  </span>{" "}
+                  :{" "}
+                  {settings?.info?.online_order_status != "1"
+                    ? "You can pre-order for tomorrow."
+                    : "You can order now."}
+                </p>
               </div>
+            ) : (
+              <></>
+            )}
+            <div className="col-lg-5">
+              {settings?.info ? (
+                <div className="menu-info">
+                  <ul>
+                    <li className="menu-button">
+                      <i className="far fa-credit-card menu-icon"></i>{" "}
+                      {settings ? settings?.info?.currency_symbol : "£"}
+                      {settings ? settings?.info?.cost_for_two : "150.00"} for
+                      two people (approx.)
+                    </li>
+                    <li className="menu-button">
+                      <i className="fas fa-biking menu-icon"></i>{" "}
+                      {settings?.info?.minimum_delivery_time
+                        ? settings?.info?.minimum_delivery_time
+                        : "40"}{" "}
+                      -{" "}
+                      {settings?.info?.maximum_delivery_time
+                        ? settings?.info?.maximum_delivery_time
+                        : "60"}{" "}
+                      mins Estimated Delivery
+                    </li>
+                    <li className="menu-button">
+                      <i className="far fa-clock menu-icon"></i>{" "}
+                      {settings?.info?.minimum_delivery_time
+                        ? settings?.info?.minimum_delivery_time
+                        : "40"}{" "}
+                      Estimated Collection
+                    </li>
+                  </ul>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         </div>
@@ -918,25 +901,29 @@ const ProductLists = () => {
                               </div>
 
                               <div className="qty-option">
-                                <button
-                                  type="button"
-                                  className="btn add_to_cart_btn"
-                                  data-type="minus"
-                                  data-field=""
-                                  disabled={item.spice_level === "0"}
-                                  onClick={() =>
-                                    onAddToCartItemHandler(
-                                      item?.id,
-                                      productCategories[selectedCategoryIndex]
-                                        .category_id,
-                                      "minus",
-                                      extraDish,
-                                      ""
-                                    )
-                                  }
-                                >
-                                  <i className="fas fa-minus"></i>
-                                </button>
+                                {item?.quantity && item?.quantity > 0 ? (
+                                  <button
+                                    type="button"
+                                    className="btn add_to_cart_btn"
+                                    data-type="minus"
+                                    data-field=""
+                                    disabled={item.spice_level === "0"}
+                                    onClick={() =>
+                                      onAddToCartItemHandler(
+                                        item?.id,
+                                        productCategories[selectedCategoryIndex]
+                                          .category_id,
+                                        "minus",
+                                        extraDish,
+                                        ""
+                                      )
+                                    }
+                                  >
+                                    <i className="fas fa-minus"></i>
+                                  </button>
+                                ) : (
+                                  <></>
+                                )}
                                 <input
                                   placeholder=""
                                   className="edit_input"
@@ -1043,14 +1030,15 @@ const ProductLists = () => {
                                     return (
                                       <tr>
                                         <td className="item_quantity">
-                                          <input
+                                          {subCategory?.quantity}
+                                          {/* <input
                                             min="1"
                                             data-cart-index="prod_3_3"
-                                            type="number"
+                                            type="text"
                                             value={subCategory?.quantity}
                                             id="item_quantity_prod_3_3"
                                             className="edit_input cart_item_quantity"
-                                          />
+                                          /> */}
                                         </td>
                                         <td className="item_name">
                                           <strong>{item?.category_name}</strong>
@@ -1070,7 +1058,8 @@ const ProductLists = () => {
                                             {subCategory?.add_on_groups[0]?.add_ons?.map(
                                               (val: any) => (
                                                 <>
-                                                  {val?.check === true && (
+                                                  {(val?.check == true ||
+                                                    val?.check == "true") && (
                                                     <small>{val?.name},</small>
                                                   )}
                                                 </>
@@ -1123,17 +1112,26 @@ const ProductLists = () => {
                                             parseFloat(subCategory?.quantity) *
                                               parseFloat(subCategory?.price) +
                                             parseFloat(
-                                              subCategory?.add_on_groups[0].add_ons
-                                                ?.filter(
-                                                  (addon: any) =>
-                                                    addon.check === true
-                                                )
-                                                ?.reduce(
-                                                  (acc: number, addon: any) =>
-                                                    acc +
-                                                    parseFloat(addon.price),
-                                                  0
-                                                )
+                                              subCategory?.add_on_groups
+                                                ?.length > 0
+                                                ? subCategory?.add_on_groups[0]?.add_ons
+                                                    ?.filter(
+                                                      (addon: any) =>
+                                                        addon?.check == true ||
+                                                        addon?.check == "true"
+                                                    )
+                                                    ?.reduce(
+                                                      (
+                                                        acc: number,
+                                                        addon: any
+                                                      ) =>
+                                                        acc +
+                                                        parseFloat(
+                                                          addon?.price
+                                                        ),
+                                                      0
+                                                    )
+                                                : 0
                                             ) *
                                               parseFloat(subCategory?.quantity)
                                           ).toFixed(2)}

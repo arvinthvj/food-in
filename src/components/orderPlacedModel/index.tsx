@@ -18,6 +18,8 @@ const OrderPlacedModel: React.FC<OrderPlacedProps> = ({
         show={orderPlacedbool}
         onHide={cancel}
         centered
+        backdrop="static"
+        keyboard={false}
         className="modal custom-modal delete-modal continue-model fade multi-step show"
       >
         <div className="modal-content">

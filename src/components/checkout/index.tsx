@@ -30,13 +30,20 @@ import { setOrderInformation } from "../../redux/Actions/splitPriceAction";
 import { acceptablepayment } from "../../assets/img";
 import { CLEAR_ORDER_DETAILS } from "../../redux/Actions/orderDetailsAction";
 import { SpinnerContext } from "../../shared/shared.module";
+import { getUserDetails } from "../../redux/Actions";
 const schema = yup.object().shape({
   register_name: yup.string().required("Name is required"),
   register_email: yup
     .string()
     .email("Invalid email")
     .required("Email is required"),
-  register_mobile: yup.string().required("Mobile is required"),
+  register_mobile: yup.string().required("Mobile is required")
+  .test("is-ten-digits", "Mobile number must be 10 digits", (value) => {
+    if (value && value.length === 10) {
+      return true;
+    }
+    return false;
+  }),
   register_password: yup.string().required("Password is required"),
   register_address: yup.string().required("Address is required"),
   register_address2: yup.string(),
@@ -101,6 +108,8 @@ const CheckOut = () => {
   const [selectedItem, setSelectedItem] = useState<any>(null);
 
   const [timeSlot, setTimeSlot] = useState<any>({});
+  const [pretimeSlot, setPreTimeSlot] = useState<any>([]);
+
   const [loading, setLoading] = useState<any>("");
   const [payDetails, setPayDetails] = useState<any>("");
   const [paymentSubmitted, setPaymentSubmitted] = useState<boolean>(false);
@@ -160,15 +169,7 @@ const CheckOut = () => {
   const payConfirmationSubmitRef = useRef<HTMLButtonElement>(null);
 
   const dispatch = useDispatch<any>();
-  const timeSlotOption =
-    timeSlot[0]?.time_slots && timeSlot[0]?.time_slots?.length > 0
-      ? timeSlot[0]?.time_slots?.map((val: any) => {
-          return {
-            value: val,
-            label: val,
-          };
-        })
-      : null;
+
   const initialValues = {
     register_name: userDetails?.data?.user?.name
       ? userDetails?.data?.user?.name
@@ -191,7 +192,9 @@ const CheckOut = () => {
     register_zip: postalCode,
     // register_zip: "",
     // Replace with your logic
-    pre_order_time_slot: "", // Set an initial value for the time slot
+    pre_order_time_slot: pretimeSlot?.value
+      ? { label: pretimeSlot?.label, value: pretimeSlot?.value }
+      : pretimeSlot, // Set an initial value for the time slot
     deliveryType: "deliver", // Set an initial value for delivery type
     paymentType: "credit", // Set an initial value for payment type
     cardHolderName: "", // Set an initial value for card holder name
@@ -218,6 +221,15 @@ const CheckOut = () => {
   );
 
   useEffect(() => {}, [getValues()]);
+  const timeSlotOption =
+    timeSlot[0]?.time_slots && timeSlot[0]?.time_slots?.length > 0
+      ? timeSlot[0]?.time_slots?.map((val: any) => {
+          return {
+            value: val,
+            label: val,
+          };
+        })
+      : [];
   const cardItem = useMemo(() => {
     if (cartInformation?.length > 0) {
       return cartInformation.map((val: any) => {
@@ -274,6 +286,8 @@ const CheckOut = () => {
       setLoading(true);
       showLoader();
       if (selectedItem == null && data?.register_address == "") {
+        console.log(selectedItem == null && data?.register_address == "", "gh");
+
         setLoading(false);
         hideLoader();
         toast.error("please enter the delivery address ");
@@ -287,10 +301,14 @@ const CheckOut = () => {
             type: "manual",
             message: "Card Holder Name is required for credit payment",
           });
+          // console.log(!data.cardHolderName, "!data.cardHolderName");
+
+          hideLoader();
+
           return;
         } else if (paymentType && !paymentSuccess.success) {
           if (!paymentSubmitted) {
-            paySubmitRef.current?.click(); // Ensure current is defined before clicking
+            paySubmitRef.current?.click(); //second click
             console.count("clickedpayment");
             setPaymentSubmitted(true);
           }
@@ -298,14 +316,19 @@ const CheckOut = () => {
       }
       if (paymentType && paymentSuccess.success === false) {
         setPaymentSubmitted(false);
+        // console.log("paymentFailed");
+
+        // hideLoader();
         return;
       } else {
+        debugger
         // if (data && paymentType && paymentSuccess.success === true) {
         //   payConfirmationSubmitRef?.current?.click();
         //   console.log("finally clicked");
 
         //   return;
         // }
+        showLoader();
         setLoading(true);
         let accountDetailsAddress = {
           address_id: selectedItem?.id,
@@ -379,14 +402,18 @@ const CheckOut = () => {
           setLoading(false);
           hideLoader();
 
-          dispatch(clearUserOrderInfoCategories);
-          dispatch({ type: CLEAR_ORDER_DETAILS });
-          clearOrders();
+          dispatch(getUserDetails(response.data));
+          // setLoginResult(response.data);
+          localStorage.setItem("token", response.data.data.token);
+          ;
           toast.success(response.data.message);
           setOrderPlacedbool(true);
           setOrderPlacedRes(response.data.data);
           setPaymentSubmitted(false);
           // navigate("/productLists")
+          dispatch(clearUserOrderInfoCategories);
+          dispatch({ type: CLEAR_ORDER_DETAILS });
+          clearOrders();
         } else {
           console.log(response, "response");
 
@@ -394,10 +421,14 @@ const CheckOut = () => {
             response?.response?.data.message ||
               response?.data?.error?.internal_message
           );
+          setLoading(false);
+          hideLoader();
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
+      toast.error(err?.response?.data?.data?.error?.internal_message);
+      hideLoader();
     } finally {
       console.count("dataSubmit");
 
@@ -426,7 +457,22 @@ const CheckOut = () => {
     const response = await getData(end_points.timeSlotApi.url);
 
     if (response) {
-      setTimeSlot(response.data.data.pre_order_date_time);
+      const Slots = response.data.data.pre_order_date_time;
+      const timeSlotOption =
+        Slots[0]?.time_slots && Slots[0]?.time_slots?.length > 0
+          ? Slots[0]?.time_slots?.map((val: any) => {
+              return {
+                value: val,
+                label: val,
+              };
+            })
+          : [];
+
+      setTimeSlot(Slots);
+      if (timeSlotOption?.length > 0) {
+        setPreTimeSlot(timeSlotOption[0]);
+        setValue("pre_order_time_slot", timeSlotOption[0]);
+      }
     }
   };
   const paymentDetails = async () => {
@@ -477,7 +523,12 @@ const CheckOut = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    let dataval = getLocalValue("cartInformationData", []);
+    console.log(cartInformationorderList, "cartInformationorderList");
+    console.count("cartInformationorderList");
+
+    let dataval = getLocalValue("cartInformationData", [])
+      ? getLocalValue("cartInformationData", [])
+      : [];
     if (cartInformationorderList?.length > 0) {
       const cartInformationData = cartInformationorderList?.filter(
         (item: any) => {
@@ -498,13 +549,24 @@ const CheckOut = () => {
       if (dataval?.length > 0) {
         setCartInformation(dataval);
         dispatch(setOrderInformation(dataval));
-      } else if ((cartInformationorderList.length = 0 && dataval.length == 0)) {
-        navigate("/productLists");
       }
+      //  else if (
+      //   cartInformationorderList?.length == 0 &&
+      //   dataval?.length == 0
+      // ) {
+      //   navigate("/productLists");
+      // }
     }
   }, [cartInformationorderList]);
-
-  useEffect(() => {}, [paymentSuccess]);
+  useEffect(() => {
+    let data = getLocalValue("cartInformationData", []);
+    if (data?.length <= 0) {
+      navigate("/productLists");
+    }
+  }, []);
+  useEffect(() => {
+    // console.log(getValues(), "getValues");
+  }, [getValues()]);
 
   return (
     <div>
@@ -736,7 +798,7 @@ const CheckOut = () => {
                               render={({ field }) => (
                                 <input
                                   type="text"
-                        
+                                  readOnly
                                   className="form-control"
                                   placeholder={postalCode}
                                   {...field}
@@ -758,13 +820,13 @@ const CheckOut = () => {
                   {preOrderStatus != "1" && (
                     <>
                       {" "}
-                      <h3 className="widget-title d-none">
+                      <h3 className="widget-title ">
                         Order Date &amp; Time Slot
                       </h3>
-                      <p className="d-none">
+                      <p className="">
                         <small>Next available day and time slots</small>
                       </p>
-                      <div className="delivery-type mb-3 d-none">
+                      <div className="delivery-type mb-3 ">
                         <div className="row">
                           <div className="col-6 form-group">
                             <Controller
@@ -801,24 +863,70 @@ const CheckOut = () => {
                             )}
                           </div>
                           <div className="col-6 form-group">
-                            <Controller
-                              name="pre_order_time_slot"
-                              control={mainControl}
-                              defaultValue={
-                                timeSlotOption ? timeSlotOption[0] : {}
-                              }
-                              render={({ field }) => (
-                                <Select
-                                  isDisabled={
-                                    timeSlotOption?.length <= 0 ? true : false
-                                  }
-                                  {...field}
-                                  placeholder="Please select the slot"
-                                  options={timeSlotOption ? timeSlotOption : []}
-                                />
-                              )}
-                            />
-                            {errors.pre_order_time_slot && (
+                            {timeSlotOption?.length > 0 ? (
+                              <Controller
+                                name="pre_order_time_slot"
+                                control={mainControl}
+                                // defaultValue={pretimeSlot[0]}
+                                // rules={{
+                                //   required: "This field is required",
+                                // }}
+                                render={({ field }) => (
+                                  <Select
+                                    isDisabled={
+                                      timeSlotOption?.length <= 0 ? true : false
+                                    }
+                                    {...field}
+                                    value={pretimeSlot}
+                                    onChange={(selectedOption) => {
+                                      field.onChange(() => {
+                                        setPreTimeSlot(selectedOption);
+
+                                        setValue(
+                                          "pre_order_time_slot",
+                                          selectedOption
+                                        );
+                                      });
+                                    }}
+                                    placeholder="Please select the slot"
+                                    options={
+                                      timeSlotOption ? timeSlotOption : []
+                                    }
+                                    // defaultInputValue={pretimeSlot[0]?.label}
+
+                                    defaultValue={
+                                      pretimeSlot && pretimeSlot?.label
+                                        ? {
+                                            label: pretimeSlot?.label,
+                                            value: pretimeSlot?.value,
+                                          }
+                                        : null
+                                    }
+                                  />
+                                )}
+                              />
+                            ) : (
+                              <Controller
+                                name="pre_order_time_slot"
+                                control={mainControl}
+                                defaultValue={
+                                  timeSlotOption ? timeSlotOption[0] : {}
+                                }
+                                render={({ field }) => (
+                                  <Select
+                                    isDisabled={
+                                      timeSlotOption?.length <= 0 ? true : false
+                                    }
+                                    {...field}
+                                    placeholder="Please select the slot"
+                                    options={
+                                      timeSlotOption ? timeSlotOption : []
+                                    }
+                                  />
+                                )}
+                              />
+                            )}
+                            {errors?.pre_order_time_slot && (
                               <small className="text-danger">
                                 {errors?.pre_order_time_slot?.message &&
                                   "Please select the slot"}

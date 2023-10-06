@@ -1,19 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "../aboutUs/aboutUs.css";
 import { breadcrumbbg, aboutimage } from "../../../../assets/img";
 import "../aboutUs/aboutUs.css";
 import { fetchAboutUsData } from "../../../../redux/Actions/policyActions";
 import { Link } from "react-router-dom";
+import { ApiServiceContext } from "../../../../core/Api/api.service";
 
 function AboutUs() {
+  const { get_cms_data, validateThemEditToken } = useContext(ApiServiceContext);
   const dispatch = useDispatch<any>();
   const settings: any = useSelector<any>((state) => state?.settings);
   const jsonData: any = useSelector<any>((state) => state.homeJsonList);
+  
+  useEffect(() => {
+    // dispatch(fetchAboutUsData());
+  }, []);
 
   useEffect(() => {
-    dispatch(fetchAboutUsData());
+    get_cms_data();
   }, []);
+
 
   return (
     <div>

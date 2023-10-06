@@ -23,6 +23,7 @@ import { ApiServiceContext } from "../../../../core/Api/api.service";
 import { fetchGetShopByPinCode } from "../../../../redux/Actions/checkoutPageActions";
 import { useNavigate } from "react-router-dom";
 import PreOrderModel from "../preOrderModel";
+import { toast } from "react-toastify";
 // import { getPostalCodeSuggestions } from '../../../../redux/Actions';
 // interface SuggestionBoxProps {
 //   suggestionsAPI: string; // API endpoint for suggestions
@@ -41,6 +42,7 @@ const SectionOneThemeOne: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<any>();
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [popoverOpen, setpopoverOpen] = useState<any>(false);
+  const [errorPostalCode, setErrorPostalCode] = useState<any>("")
 
   const [error, setError] = useState<string | null>(null); // Added error state
   // const postcodesuggs: any = useSelector<any>(
@@ -62,6 +64,11 @@ const SectionOneThemeOne: React.FC = () => {
 
         const data = await response;
         const fetchdata = data.data.data;
+        if(fetchdata && fetchdata instanceof Object && Object.keys(fetchdata).includes("error")){
+          setErrorPostalCode(fetchdata?.error?.internal_message);
+        }else{
+          setErrorPostalCode("")
+        }
         console.log(fetchdata, "locationfetch response");
         setSuggestions(fetchdata);
         setpopoverOpen(true);
@@ -105,19 +112,27 @@ const SectionOneThemeOne: React.FC = () => {
   const locationFetch = async () => {
     try {
       const response = await getData(end_points.locationfetchAPi.url);
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
+      if (response.data.code === "200") {
+        const data = await response.json();
+       
       console.log(data, "locationfetch response"); // Log the entire response
 
       if (data && Array.isArray(data.postalCodeList)) {
         // Check if data contains postalCodeList
         setPostalCodeList(data.postalCodeList);
+        toast.success(data.message);
+
         setError(null); // Clear any previous error
       } else {
         setError("Invalid data format received from the API");
       }
+
+      }else {
+        console.log(response, "response");
+
+        
+      }
+      
     } catch (error) {
       // setError("Error fetching location data: " + error.message);
     }
@@ -162,46 +177,20 @@ const SectionOneThemeOne: React.FC = () => {
     setIsDropdownOpen((prev) => !prev);
   };
 
-  // useEffect(() => {
-  //   if (searchTerm.length >= 2) {
-  //     console.log(searchTerm, "searchTerm")
-
-  //     fetch(end_points.locationfetchAPi.url + `?keyword=${searchTerm}`)
-  //     .then((response) => {
-  //       console.log(response,"response")
-
-  //       if (!response.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       console.log(data,7777)
-
-  //       setPostalCodeList(data.postalCodeList);
-  //       setError(null); // Clear any previous error
-  //     })
-  //     .catch((error) => {
-  //       setError("Error fetching suggestions: " + error.message);
-  //     });
-  //   } else {
-
-  //     setPostalCodeList([]);
-  //   }
-  //  }, [searchTerm]);
-
-  // const handleChange = (e: any) => {
-  //   const result = e.target.value.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
-  //   // setPostalCodeList(e.target.value);
-  //   const { value } = e.target;
-  //   const updateValue = value.replace(/\s/g, "");
-  //   if (value.length > 0) {
-  //     dispatch(fetchPostalCodes(updateValue));
-  //   }
-  //   setPostalCodeValue(updateValue);
-  // };
+ 
 
   const handleBooknow = async () => {
+    if(filteredOptions?.length && !filteredOptions.filter(e=>e.postcode == searchTerm).length){
+      toast.error("Post code doesn't match! Please enter valid postcode.")
+     return false
+   }else{
+    setErrorPostalCode("")
+   }
+   if(errorPostalCode.length){
+    toast.error(errorPostalCode);
+    return false
+}
+   
     const response = await getData(end_points.checkPreOrderApi.url);
     let validTime = response?.data?.data?.online_order_status;
     setLocalValue("preOrderStatus", validTime);

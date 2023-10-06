@@ -64,7 +64,7 @@ const SectionThreeEditThemeOne = () => {
           </div>
           <div className="modal-content modal-body">
             <div className="edit-section">
-              <h4 className="edit-section-hdr">Title</h4>
+              <h4 className="edit-section-hdr">Title</h4><small>(max 120 char)</small>
               <div className="row">
                 <div className="col">
                   <div className="mb-3">

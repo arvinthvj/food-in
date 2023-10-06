@@ -14,7 +14,14 @@ interface AddAddressProps {
 const schema = yup.object().shape({
   register_name: yup.string().required("Name is required"),
 
-  register_mobile: yup.string().required("Mobile is required"),
+  register_mobile: yup.string()
+  .required("Mobile is required")
+  .test("is-ten-digits", "Mobile number must be 10 digits", (value) => {
+    if (value && value.length === 10) {
+      return true;
+    }
+    return false;
+  }),
   register_address: yup.string().required("Address is required"),
   register_address2: yup.string(),
   register_city: yup.string().required("City is required"),

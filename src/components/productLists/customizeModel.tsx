@@ -18,84 +18,47 @@ const CustomizeModel: React.FC<CustomizeModelProps> = ({
   setExtraDish,
   extraDish,
 }) => {
+  console.log(customizeData, "customizeData");
+
   const [optionIndex, setOptionIndex] = useState({ index: -1, id: "" });
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [instructionValue, setInstructionValue] = useState("");
-  // const [custCheckbox, setCustCheckbox] = useState<number>(0);
-  //  const [checked, setChecked] = useState<number>(0);
 
-  // const [extraDishChecked, setExtraDishChecked] = useState<Array<boolean>>(
-  //   new Array(customizeData?.detail?.add_on_groups?.length).fill(false)
-  // );
+  const extrafun = (e: any, price: any, index: number, check: boolean) => {
+    console.log(
+      e?.target?.value,
+      e?.target?.checked,
+      price,
+      index,
+      check,
+      "cliked"
+    );
 
-  const [extraDishChecked, setExtraDishChecked] = useState(
-    customizeData?.detail?.add_on_groups?.map(() => true) || []
-  );
-  // const [extraDishChecked, setExtraDishChecked] = useState(
-  //   extraDish?.map((e:any) => e.value==true? e.price: 0) || []
-  // );
-
- 
-  const extrafun = (e: any, price: any, index: number, check:boolean) => {
     let id = e?.target?.value?.toString();
     let val: any = {
       id: id,
       value: e?.target?.checked,
-      check:check,
+      check: check,
       name: e?.target?.name,
       price: price,
     };
     //let newval = [...extraDish];
 
-
     setExtraDish((prev: any) => {
-  
       let updatedExtraDish = [...prev];
-       //  console.log(updatedExtraDish, "updatedExtraDish")
+      //  console.log(updatedExtraDish, "updatedExtraDish")
 
+      let itemIndex = updatedExtraDish.findIndex((item) => item.id == id);
+      console.log(itemIndex, "itemIndex");
 
-      let itemIndex = updatedExtraDish.findIndex((item) => item.id === id);
-  
-      if (itemIndex === -1) {
+      if (itemIndex == -1) {
         updatedExtraDish.push(val);
       } else {
         updatedExtraDish[itemIndex] = val;
       }
       return updatedExtraDish;
-
     });
-
-    // setExtraDishChecked((prevChecked:any) => {
-    //   const newChecked = [...prevChecked];
-    //   newChecked[index] = e.target.checked;
-    //   return newChecked;
-    // });
-    const newCheckedState = [...extraDishChecked];
-    newCheckedState[index] = e.target.checked;
-    setExtraDishChecked(newCheckedState);
-    updateTotalPriceAndCheckboxes(); 
   };
-
-
-  useEffect(() => {
-    customizeData &&
-      setOptionIndex({
-        ...optionIndex,
-        index: customizeData?.detail?.options?.findIndex((d: any) => {
-          return d?.is_default == "1";
-        }),
-      });
-      
-  
-    customizeData?.detail?.instructionnote &&
-      setInstructionValue(customizeData.detail.instructionnote);
-    return () => {
-      setInstructionValue(""); // Cleanup when component unmounts
-    };
-    
-  }, [customizeData]);
-  useEffect(() => {
-  }, [optionIndex]);
 
   useEffect(() => {
     if (optionIndex?.index == -1) {
@@ -109,69 +72,66 @@ const CustomizeModel: React.FC<CustomizeModelProps> = ({
     // );
   }, [extraDish, optionIndex]);
 
-  const updateTotalPriceAndCheckboxes=()=>{
-    // Calculate the totalPrice based on your logic
-   let extraDished=customizeData?.detail?.add_on_groups[0]?.add_ons;
+  const updateTotalPriceAndCheckboxes = () => {
+    console.log(extraDish, "extraDishd");
+    let optionPrice = customizeData?.detail?.options[optionIndex?.index]?.price;
 
-  //   let optionPrice = customizeData?.detail?.options[optionIndex.index]?.price;
-     let filterDished = extraDished?.filter((item: any) => (item?.check===true))
-        let priced = filterDished?.map((item: any) => item.price);
+    setTotalPrice((prev: any) => {
+      let tot: any = optionPrice;
+      extraDish?.length > 0 &&
+        extraDish?.map((val: any) => {
+          console.log(val, "extraDish");
+          // val.value
+          if (val?.value == true || val?.value == "true") {
+            tot = parseFloat(tot) + parseFloat(val?.price);
+          }
+          console.log(tot, "tot");
 
-      const customizePriced = priced ? priced.reduce(
-          (acc: number, currentValue: any) => acc + parseFloat(currentValue),
-          0 
-        ): 0
-      
+          return tot;
+        });
+      let validTotal = parseFloat(tot).toFixed(2);
+      console.log(prev, "ttprice", "extraDish", optionPrice, validTotal);
 
-     let filterDisheds = extraDish?.filter((item: any) => (item?.value===false))
+      return validTotal;
+    });
+  };
 
-         let priceds = filterDisheds?.map((item: any) => item.price);
+  useEffect(() => {
+    updateTotalPriceAndCheckboxes();
+  }, [customizeData, optionIndex?.index, extraDish]);
+  useEffect(() => {
+    console.log(totalPrice, "totalPrice");
+  }, [totalPrice]);
+  useEffect(() => {
+    customizeData &&
+      setOptionIndex({
+        ...optionIndex,
+        index: customizeData?.detail?.options?.findIndex((d: any) => {
+          return d?.is_default == "1";
+        }),
+      });
+    if (customizeData) {
+      setExtraDish((prev: any) => {
+        console.log(prev, "prev");
+        let add_ons =
+          customizeData?.detail?.add_on_groups?.length > 0 &&
+          customizeData?.detail?.add_on_groups[0]?.add_ons?.map((val: any) => {
+            return {
+              ...val,
+              value: val?.check,
+            };
+          });
 
-      const customizePriceds = priceds ? priceds.reduce(
-          (acc: number, currentValue: any) => acc - parseFloat(currentValue),
-          0): 0
-  
-      
-     let optionPrice = customizeData?.detail?.options[optionIndex.index]?.price;
-
-    let filterDish = extraDish?.filter((item: any) => item.value === true);
-
-    let prices = filterDish?.map((item: any) => item.price);
-
-    const customizePrice = prices? prices?.reduce(
-      (acc: number, currentValue: any) => acc + parseFloat(currentValue),
-      0
-    ): 0
-
-
-if(customizePrice===0){
-  const totalPriceValues=parseInt((optionPrice));
-setTotalPrice(totalPriceValues);
-}
-
-    const totalPriceValues =
-    (( parseFloat(customizePriced.toFixed(2))+
-  parseInt(optionPrice)+  parseFloat(customizePriceds.toFixed(2)))+ (parseFloat(customizePrice.toFixed(2))));
-   const totalPriceValue=parseFloat((totalPriceValues).toFixed(2));
-     
-    setTotalPrice(totalPriceValue);
-
-        }
-
-
-
-  
-  useEffect(()=>{
-    updateTotalPriceAndCheckboxes()
-
-  },[customizeData, optionIndex.index, extraDish])
-
-  
-  useEffect(()=>{
-    updateTotalPriceAndCheckboxes()
-
-  },[extraDish])
-//console.log(555555,filteredItems);
+        return add_ons;
+      });
+    }
+    customizeData?.detail?.instructionnote &&
+      setInstructionValue(customizeData?.detail?.instructionnote);
+    return () => {
+      setInstructionValue(""); // Cleanup when component unmounts
+      setTotalPrice(0);
+    };
+  }, [customizeData]);
 
   return (
     <Modal
@@ -184,14 +144,14 @@ setTotalPrice(totalPriceValues);
         <div className="modal-body">
           <div className="d-flex justify-content-between">
             <div>
-              <h4 className="customize-title"><span>Customize Your</span><br/>
-              {customizeData?.detail?.name}
+              <h4 className="customize-title">
+                <span>Customize Your</span>
+                <br />
+                {customizeData?.detail?.name}
               </h4>
             </div>
             <div>
-              <h4>
-                £ {totalPrice  }
-              </h4>
+              <h4>£ {totalPrice}</h4>
             </div>
           </div>
           <h6>Options:</h6>
@@ -199,29 +159,27 @@ setTotalPrice(totalPriceValues);
             return (
               <div className="form-check">
                 <label className="form-check-label">
-                <input
-                  id={index}
-                  type="radio"
-                  checked={optionIndex.index === index ? true : false}
-                  value={val?.id}
-                  onChange={(e: any) => {
-                    setOptionIndex({ id: val?.id, index: index });
-                    handleOptionChange(
-                      val?.id,
-                      customizeData?.main_id,
-                      customizeData?.detail?.id,
-                      extraDish
-                    );
-                  }}
-                  className="form-check-input custom_prod_options custom_prod_options_1"
-                />
-                {val?.name}
+                  <input
+                    id={index}
+                    type="radio"
+                    checked={optionIndex.index == index ? true : false}
+                    value={val?.id}
+                    onChange={(e: any) => {
+                      setOptionIndex({ id: val?.id, index: index });
+                      handleOptionChange(
+                        val?.id,
+                        customizeData?.main_id,
+                        customizeData?.detail?.id,
+                        extraDish
+                      );
+                    }}
+                    className="form-check-input custom_prod_options custom_prod_options_1"
+                  />
+                  {val?.name}
                 </label>
               </div>
             );
           })}
-
-     
 
           {customizeData?.detail?.add_on_groups.map((val: any, index: any) => {
             return (
@@ -230,21 +188,26 @@ setTotalPrice(totalPriceValues);
                   <div>
                     <h5>{val?.name}</h5>
                     {val?.add_ons?.map((a: any, Innerindex: any) => {
+                      console.log(a, "clicked a");
+
                       return (
                         <div>
                           <input
                             type="checkbox"
                             value={a?.id}
-                            // checked={a?.checked === true ? true : false}
+                            // checked={a?.checked == true ? true : false}
                             name={a?.name}
-                            id={a?.id + '_' + Innerindex} // Use a unique ID here
-
-                       //   defaultChecked={extraDishChecked[index]} // Set the checked state based on extraDishChecked
-
-                         defaultChecked={a?.check === true ? true : false}
+                            id={a?.id + "_" + Innerindex}
+                            defaultChecked={
+                              a?.check == true || a?.check == "true"
+                            }
                             onChange={(e: any) => {
-                              
-                              extrafun(e, a?.price, index, a?.check);
+                              extrafun(
+                                e,
+                                a?.price,
+                                index,
+                                a?.check == true ? true : false
+                              );
                             }}
                           />
                           <span>
@@ -281,7 +244,8 @@ Please mention here`}
               Cancel
             </button>
             <span>
-              QTY: <span>1</span> <button
+              QTY: <span>1</span>{" "}
+              <button
                 className="btn btn-primary"
                 onClick={() => {
                   onAddOrder(
@@ -296,7 +260,7 @@ Please mention here`}
                   }, 100);
                 }}
               >
-                +
+                Add
               </button>
             </span>
           </div>

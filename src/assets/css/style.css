@@ -2871,6 +2871,7 @@ button.track-order {
   }
   .homeimggrid img {
     width : calc(25% - 30px);
+    cursor: pointer;
   }
 .price-header {
     margin: 0 0 10px;

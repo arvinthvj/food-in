@@ -43,14 +43,15 @@ const AmountDetails: React.FC<AmountDetailsProps> = ({
                         return (
                           <tr>
                             <td className="item_quantity">
-                              <input
+                            {subCategory?.quantity}
+                              {/* <input
                                 min="1"
                                 data-cart-index="prod_3_3"
                                 type="number"
                                 value={subCategory?.quantity}
                                 id="item_quantity_prod_3_3"
                                 className="edit_input cart_item_quantity"
-                              />
+                              /> */}
                             </td>
                             <td className="item_name">
                               <strong>{item?.category_name}</strong>

@@ -441,7 +441,7 @@ function MyOrders() {
             </div>
           </div>
           {myOrderList?.orders_list?.length > 0 && (
-            <div className="row d-none">
+            <div className="row">
               <div className="col-md-12 pagination_myorder">
                 <nav className="myorder-pagination">
                   <ul className="pagination">
@@ -460,16 +460,19 @@ function MyOrders() {
                       <span>«</span>
                     </li>
                     {pagination.pages &&
-                      pagination.pages.map((page: number, idx: number) => (
-                        <li
-                          onClick={() => handlePagination(page)}
-                          className={`${
-                            page === pagination.currentPage ? "active" : ""
-                          }`}
-                        >
-                          <span>{page} </span>
-                        </li>
-                      ))}
+                      pagination.pages.map((page: number, idx: number) => {
+                        debugger
+                        return (
+                          <li
+                            onClick={() => handlePagination(page)}
+                            className={`${
+                              page === pagination.currentPage ? "" : ""
+                            }`}
+                          >
+                            <span>{pagination.currentPage} </span>
+                          </li>
+                        )
+                      })}
                     <li onClick={() => handlePagination(0, "next")}>
                       <span>»</span>
                     </li>
