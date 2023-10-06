@@ -89,17 +89,18 @@ const BookNow: React.FC = () => {
     // dispatch(fetchPostalCodes(searchTerm));
   };
   const handleBooknow = async () => {
-    const response = await getData(end_points.checkPreOrderApi.url);
-    let validTime = response?.data?.data?.online_order_status;
-    setLocalValue("preOrderStatus", validTime);
-
-    if (validTime != "1") {
-      setPreOderShow(true);
-      return;
-    } else {
-      preOrderList();
-    }
-  };
+    debugger
+    if(filteredOptions?.length && !filteredOptions.filter(e=>e.postcode == searchTerm).length){
+      toast.error("Post code doesn't match! Please enter valid postcode.")
+     return false
+   }else{
+    setErrorPostalCode("")
+   }
+    debugger
+    if(errorPostalCode.length){
+      toast.error(errorPostalCode);
+      return false
+  }
   const preOrderList = async () => {
     const isValid = state.postalCodeList.some(
       (item: any) => item.postcode === postalCodeValue.toUpperCase()
