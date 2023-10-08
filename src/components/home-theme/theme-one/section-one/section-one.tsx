@@ -24,6 +24,7 @@ import { fetchGetShopByPinCode } from "../../../../redux/Actions/checkoutPageAct
 import { useNavigate } from "react-router-dom";
 import PreOrderModel from "../preOrderModel";
 import { toast } from "react-toastify";
+import TryAgainModal from "../tryAgain";
 // import { getPostalCodeSuggestions } from '../../../../redux/Actions';
 // interface SuggestionBoxProps {
 //   suggestionsAPI: string; // API endpoint for suggestions
@@ -36,6 +37,7 @@ const SectionOneThemeOne: React.FC = () => {
   const [postalCodeValue, setPostalCodeValue] = useState("");
   const { getData } = useContext(ApiServiceContext);
   const [preOderShow, setPreOderShow] = useState<any>("");
+  const [trygainShow, setTrygainShow] = useState<Boolean>(false);
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [suggestions, setSuggestions] = useState<any>([]);
@@ -189,11 +191,11 @@ const SectionOneThemeOne: React.FC = () => {
       return false
     }
     if(filteredOptions?.length && !filteredOptions.filter(e=>e.postcode == searchTerm).length){
-      toast.error("Post code doesn't match! Please enter valid postcode.")
+      setTrygainShow(true)
      return false
    }
    if(errorPostalCode.length){
-    toast.error(errorPostalCode);
+    setTrygainShow(true)
     return false
 }
 
@@ -372,6 +374,16 @@ const SectionOneThemeOne: React.FC = () => {
               setPreOderShow(false);
             }}
             preOrderList={preOrderList}
+          />
+        </>
+      ) : null}
+       {trygainShow ? (
+        <>
+          <TryAgainModal
+            tryAgainShow={trygainShow}
+            cancel={() => {
+              setTrygainShow(false);
+            }}
           />
         </>
       ) : null}
