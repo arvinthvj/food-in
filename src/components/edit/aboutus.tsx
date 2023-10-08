@@ -1,20 +1,17 @@
 import React, { useContext, useEffect } from "react";
-import Header from "../home-theme/theme-one/header/headerThemeOne";
-import Footer from "../footer";
 import { useSelector } from "react-redux";
 import { ApiServiceContext } from "../../core/Api/api.service";
 import { useNavigate } from "react-router";
-import AboutusEditThemeOne from "../home-theme/theme-one/aboutUs/aboutusEditThemeOne";
-import AboutUs from "../home-theme/theme-one/aboutUs";
+import AboutusEditThemeOne from "../home-theme/theme-one/pages-theme/aboutUs/aboutusEditThemeOne";
+import AboutUs from "../home-theme/theme-one/pages-theme/aboutUs/aboutus";
 
 const EditAboutus: React.FC = () => {
   const { get_cms_data, validateThemEditToken } = useContext(ApiServiceContext);
-  const settingsData: any = useSelector<any>((state) => state?.settings);
-  const jsonData: any = useSelector<any>((state) => state.homeJsonList);
-  const navigate = useNavigate();
+
   useEffect(() => {
     get_cms_data();
   }, []);
+
   useEffect(() => {
     // const url = new URL(window.location.href);
     // const token = url.searchParams.get("token");
@@ -28,12 +25,6 @@ const EditAboutus: React.FC = () => {
     //   navigate("/");
     // }
   }, []);
-
-  const checkIsSectionEnabled = (index: any) => {
-    // if (settingsData?.template == 1) {
-      return jsonData?.theme_1?.home?.sections[index]?.is_section_enable;
-    // }
-  };
 
   return (
     <>

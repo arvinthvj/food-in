@@ -380,7 +380,7 @@ function Header() {
             <div className="col-auto">
               <div className="header-top-right">
                 <ul>
-                  <li>
+                  {/* <li>
                     {jsonData?.theme_1?.home?.header?.order_details?.order_text}
                     <span
                       className={`ms-1 badge
@@ -397,7 +397,7 @@ function Header() {
                         ? "Open"
                         : "Close"}
                     </span>
-                  </li>
+                  </li> */}
                   <li>
                     <i className="fas fa-truck"></i>{" "}
                     {
@@ -430,46 +430,46 @@ function Header() {
         </div>
       </div>
       <header className={fixedheader}>
-          <div className="container-fluid">
-            <div className="row header-nav">
-              <div className="col-md-12 col-sm-12" ref={menuRef}>
-                <div className="header-row">
-                  <div className="logo">
-                    <span
-                      id="sidebarCollapse"
-                      className="d-block d-md-none"
-                      onClick={sidebarOpen}
+        <div className="container-fluid">
+          <div className="row header-nav">
+            <div className="col-md-12 col-sm-12" ref={menuRef}>
+              <div className="header-row">
+                <div className="logo">
+                  <span
+                    id="sidebarCollapse"
+                    className="d-block d-md-none"
+                    onClick={sidebarOpen}
+                  >
+                    <img src={mobilemenu} className="img-fluid" />
+                  </span>
+                  <Link to="/">
+                    <img
+                      id="site_logo"
+                      src={`${
+                        Object.keys(settings).length > 0 && settings.info.logo
+                      }${
+                        Object.keys(settings).length > 0 &&
+                        settings?.info?.style_logo_en
+                          ? settings?.info?.style_logo_en
+                          : ""
+                      }`}
+                      // src={`${Object.keys(settings).length > 0 && settings.info.style_logo_en}`}
+                      alt=""
+                    />
+                  </Link>
+                  <span className="mob-user hidden-md dropdown d-block d-md-none">
+                    <img
+                      src={moreitems}
+                      className="img-fluid"
+                      alt=""
+                      data-bs-toggle="dropdown"
+                    />
+                    <ul
+                      role="menu"
+                      className="dropdown-menu"
+                      aria-labelledby="drop1"
                     >
-                      <img src={mobilemenu} className="img-fluid" />
-                    </span>
-                    <Link to="/">
-                      <img
-                        id="site_logo"
-                        src={`${
-                          Object.keys(settings).length > 0 && settings.info.logo
-                        }${
-                          Object.keys(settings).length > 0 &&
-                          settings?.info?.style_logo_en
-                            ? settings?.info?.style_logo_en
-                            : ""
-                        }`}
-                        // src={`${Object.keys(settings).length > 0 && settings.info.style_logo_en}`}
-                        alt=""
-                      />
-                    </Link>
-                    <span className="mob-user hidden-md dropdown d-block d-md-none">
-                      <img
-                        src={moreitems}
-                        className="img-fluid"
-                        alt=""
-                        data-bs-toggle="dropdown"
-                      />
-                      <ul
-                        role="menu"
-                        className="dropdown-menu"
-                        aria-labelledby="drop1"
-                      >
-                        {/* <li onClick={() => setQuickBookPopup(!quickBookPopup)}>
+                      {/* <li onClick={() => setQuickBookPopup(!quickBookPopup)}>
                           <a
                             href="javascript:void(0);"
                             data-bs-toggle="modal"
@@ -479,192 +479,192 @@ function Header() {
                             Quick Order
                           </a>
                         </li> */}
-                        {!userToken && (
-                          <li className="login">
-                            <Link to="/login">
-                              <img src={myprofile} className="img-fluid" alt="" />
-                              Login
-                            </Link>
-                          </li>
-                        )}
-                        {userToken && (
-                          <li className="dropdown menu-hover-dropdown">
-                            <a
-                              className="menuitem"
-                              href="#"
-                              onClick={(e) => handleLogout(e)}
-                            >
-                              <img src={logout} className="img-fluid" alt="" />
-                              Log Out
-                            </a>
-                          </li>
-                        )}
-                      </ul>
-                    </span>
-                  </div>
-                  <ul className="header-link float-end d-none d-md-flex mb-0">
-                    <li className="menu-hover">
-                      {activeUrl === "/" ? (
-                        <NavLink className="nav-bar-link active" to="/">
-                          Home
-                        </NavLink>
-                      ) : (
-                        <NavLink className="nav-bar-link" to="/">
-                          Home
-                        </NavLink>
-                      )}
-                    </li>
-                    <li className="menu-hover">
-                      {activeUrl === "/aboutUs" ? (
-                        <NavLink className="nav-bar-link active" to="/aboutUs">
-                          About Us
-                        </NavLink>
-                      ) : (
-                        <NavLink className="nav-bar-link" to="/aboutUs">
-                          About Us
-                        </NavLink>
-                      )}
-                    </li>
-                    <li className="menu-hover">
-                      {activeUrl === "/openingtimes" ? (
-                        <NavLink
-                          className="nav-bar-link active"
-                          to="/openingtimes"
-                        >
-                          Opening Times
-                        </NavLink>
-                      ) : (
-                        <NavLink className="nav-bar-link" to="/openingtimes">
-                          Opening Times
-                        </NavLink>
-                      )}
-                    </li>
-                    <li className="menu-hover">
-                      {activeUrl === "/deliveryinfo" ? (
-                        <NavLink
-                          className="nav-bar-link active"
-                          to="/deliveryinfo"
-                        >
-                          Deliveries
-                        </NavLink>
-                      ) : (
-                        <NavLink className="nav-bar-link" to="/deliveryinfo">
-                          Deliveries
-                        </NavLink>
-                      )}
-                    </li>
-                    <li className="faq-menu menu-hover">
-                      {activeUrl === "/specialoffers" ? (
-                        <NavLink
-                          className="nav-bar-link active"
-                          to="/specialoffers"
-                        >
-                          Special Offers
-                        </NavLink>
-                      ) : (
-                        <NavLink className="nav-bar-link" to="/specialoffers">
-                          Special Offers
-                        </NavLink>
-                      )}
-                    </li>
-                    <li className="faq-menu menu-hover">
-                      {activeUrl === "/contactus" ? (
-                        <NavLink className="nav-bar-link active" to="/contactus">
-                          Contact Us
-                        </NavLink>
-                      ) : (
-                        <NavLink className="nav-bar-link" to="/contactus">
-                          Contact Us
-                        </NavLink>
-                      )}
-                    </li>
-                    <li className="cart-list">
-                      <Link
-                        className="cart-blk cart-btn"
-                        to={cartCounts > 0 ? "/productLists" : "#"}
-                        id="toggle-cart"
-                      >
-                        <i
-                          className="fa fa-shopping-cart align-middle"
-                          aria-hidden="true"
-                        ></i>
-                        <span
-                          id="cart_total_count"
-                          className="count-blk badge rounded-pill badge-warning"
-                        >
-                          {cartCounts}
-                        </span>
-                      </Link>
-                    </li>
-                    {!userToken && (
-                      <>
-                        <li className="menu-hover">
-                          <Link to="/login" className="login-m">
-                            <i className="far fa-user"></i> Log in
+                      {!userToken && (
+                        <li className="login">
+                          <Link to="/login">
+                            <img src={myprofile} className="img-fluid" alt="" />
+                            Login
                           </Link>
                         </li>
-                      </>
-                    )}
-                    {userToken && (
-                      <li className="dropdown menu-hover-dropdown login-link cart-list dropdown-notification">
-                        <Link
-                          to="#"
-                          id="drop1"
-                          data-bs-toggle="dropdown"
-                          className="dropdown-toggle"
-                        >
-                          <i
-                            className="fa fa-bell"
-                            aria-hidden="true"
-                            onClick={() => setChangePopup(!changePopup)}
-                          ></i>
-                          <span
-                            id="notify_total_count"
-                            className="count-blk badge rounded-pill badge-warning"
+                      )}
+                      {userToken && (
+                        <li className="dropdown menu-hover-dropdown">
+                          <a
+                            className="menuitem"
+                            href="#"
+                            onClick={(e) => handleLogout(e)}
                           >
-                            {notifyCount.length}
-                          </span>
-                        </Link>
-                        <div className="dropdown-menu">
-                          <Notification />
-                        </div>
-                      </li>
+                            <img src={logout} className="img-fluid" alt="" />
+                            Log Out
+                          </a>
+                        </li>
+                      )}
+                    </ul>
+                  </span>
+                </div>
+                <ul className="header-link float-end d-none d-md-flex mb-0">
+                  <li className="menu-hover">
+                    {activeUrl === "/" ? (
+                      <NavLink className="nav-bar-link active" to="/">
+                        Home
+                      </NavLink>
+                    ) : (
+                      <NavLink className="nav-bar-link" to="/">
+                        Home
+                      </NavLink>
                     )}
-
-                    {userToken && (
-                      <li className="dropdown menu-hover-dropdown">
-                        <Link
-                          to="#"
-                          id="drop1"
-                          data-bs-toggle="dropdown"
-                          className="dropdown-toggle"
-                          role="button"
-                          onClick={() =>
-                            setChangePopupProfile(!changePopupProfile)
-                          }
+                  </li>
+                  <li className="menu-hover">
+                    {activeUrl === "/aboutUs" ? (
+                      <NavLink className="nav-bar-link active" to="/aboutUs">
+                        About Us
+                      </NavLink>
+                    ) : (
+                      <NavLink className="nav-bar-link" to="/aboutUs">
+                        About Us
+                      </NavLink>
+                    )}
+                  </li>
+                  <li className="menu-hover">
+                    {activeUrl === "/openingtimes" ? (
+                      <NavLink
+                        className="nav-bar-link active"
+                        to="/openingtimes"
+                      >
+                        Opening Times
+                      </NavLink>
+                    ) : (
+                      <NavLink className="nav-bar-link" to="/openingtimes">
+                        Opening Times
+                      </NavLink>
+                    )}
+                  </li>
+                  <li className="menu-hover">
+                    {activeUrl === "/deliveryinfo" ? (
+                      <NavLink
+                        className="nav-bar-link active"
+                        to="/deliveryinfo"
+                      >
+                        Deliveries
+                      </NavLink>
+                    ) : (
+                      <NavLink className="nav-bar-link" to="/deliveryinfo">
+                        Deliveries
+                      </NavLink>
+                    )}
+                  </li>
+                  <li className="faq-menu menu-hover">
+                    {activeUrl === "/specialoffers" ? (
+                      <NavLink
+                        className="nav-bar-link active"
+                        to="/specialoffers"
+                      >
+                        Special Offers
+                      </NavLink>
+                    ) : (
+                      <NavLink className="nav-bar-link" to="/specialoffers">
+                        Special Offers
+                      </NavLink>
+                    )}
+                  </li>
+                  <li className="faq-menu menu-hover">
+                    {activeUrl === "/contactus" ? (
+                      <NavLink className="nav-bar-link active" to="/contactus">
+                        Contact Us
+                      </NavLink>
+                    ) : (
+                      <NavLink className="nav-bar-link" to="/contactus">
+                        Contact Us
+                      </NavLink>
+                    )}
+                  </li>
+                  <li className="cart-list">
+                    <Link
+                      className="cart-blk cart-btn"
+                      to={cartCounts > 0 ? "/productLists" : "#"}
+                      id="toggle-cart"
+                    >
+                      <i
+                        className="fa fa-shopping-cart align-middle"
+                        aria-hidden="true"
+                      ></i>
+                      <span
+                        id="cart_total_count"
+                        className="count-blk badge rounded-pill badge-warning"
+                      >
+                        {cartCounts}
+                      </span>
+                    </Link>
+                  </li>
+                  {!userToken && (
+                    <>
+                      <li className="menu-hover">
+                        <Link to="/login" className="login-m">
+                          <i className="far fa-user"></i> Log in
+                        </Link>
+                      </li>
+                    </>
+                  )}
+                  {userToken && (
+                    <li className="dropdown menu-hover-dropdown login-link cart-list dropdown-notification">
+                      <Link
+                        to="#"
+                        id="drop1"
+                        data-bs-toggle="dropdown"
+                        className="dropdown-toggle"
+                      >
+                        <i
+                          className="fa fa-bell"
+                          aria-hidden="true"
+                          onClick={() => setChangePopup(!changePopup)}
+                        ></i>
+                        <span
+                          id="notify_total_count"
+                          className="count-blk badge rounded-pill badge-warning"
                         >
-                          {`Hi ${name || userName}!`}
-                          <b className="caret"></b>
-                        </Link>
-                        <div className="dropdown-menu">{<Profile />}</div>
-                      </li>
-                    )}
-                    <li className="site-phone">
-                      <div className="call-icon">
-                        <img src={callicon} alt="" />
-                      </div>
-                      <div>
-                        <div className="ph-title">Online Ordering Service</div>
-                        <div className="ph-number">
-                          {settings?.info?.customer_care_number}
-                        </div>
+                          {notifyCount.length}
+                        </span>
+                      </Link>
+                      <div className="dropdown-menu">
+                        <Notification />
                       </div>
                     </li>
-                  </ul>
-                </div>
+                  )}
+
+                  {userToken && (
+                    <li className="dropdown menu-hover-dropdown">
+                      <Link
+                        to="#"
+                        id="drop1"
+                        data-bs-toggle="dropdown"
+                        className="dropdown-toggle"
+                        role="button"
+                        onClick={() =>
+                          setChangePopupProfile(!changePopupProfile)
+                        }
+                      >
+                        {`Hi ${name || userName}!`}
+                        <b className="caret"></b>
+                      </Link>
+                      <div className="dropdown-menu">{<Profile />}</div>
+                    </li>
+                  )}
+                  <li className="site-phone">
+                    <div className="call-icon">
+                      <img src={callicon} alt="" />
+                    </div>
+                    <div>
+                      <div className="ph-title">Online Ordering Service</div>
+                      <div className="ph-number">
+                        {settings?.info?.customer_care_number}
+                      </div>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
+        </div>
       </header>
       <nav
         id="sidebar"

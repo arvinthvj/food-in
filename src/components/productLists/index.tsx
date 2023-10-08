@@ -691,7 +691,7 @@ const ProductLists = () => {
                   </span>{" "}
                   :{" "}
                   {settings?.info?.online_order_status != "1"
-                    ? "You can pre-order for tomorrow."
+                    ? "You can pre-order now."
                     : "You can order now."}
                 </p>
               </div>
@@ -1007,6 +1007,9 @@ const ProductLists = () => {
                     </div>
                     <div className="price-body table-responsive">
                       <table className="order-table">
+                      {cartInformation?.map((item: any) => {
+                            return (
+                              <>
                         <thead>
                           <tr>
                             <th className="item_quantity">Qty</th>
@@ -1018,9 +1021,9 @@ const ProductLists = () => {
                           </tr>
                         </thead>
                         <tbody id="cart_body">
-                          {cartInformation?.map((item: any) => {
+                          {/* {cartInformation?.map((item: any) => {
                             return (
-                              <>
+                              <> */}
                                 {item?.subcategories[0].products
                                   ?.filter(
                                     (subItem: any) =>
@@ -1108,7 +1111,9 @@ const ProductLists = () => {
                                               ?.currency
                                           }
                                           &nbsp;
+                                          {splitAmountDetails?.currency_symbol}
                                           {(
+                                          
                                             parseFloat(subCategory?.quantity) *
                                               parseFloat(subCategory?.price) +
                                             parseFloat(
@@ -1139,10 +1144,13 @@ const ProductLists = () => {
                                       </tr>
                                     );
                                   })}
-                              </>
-                            );
-                          })}
+                            
+                          {/* // })} */}
                         </tbody>
+                        </>
+                            );
+                      })}
+
                       </table>
                       <div className="cs-option-amt">
                         <div className="cs-option-amt-list">
@@ -1154,7 +1162,7 @@ const ProductLists = () => {
                           <div className="cs-option-amt-right">
                             {/* {settings?.WebmasterSettings?.currency}{" "}
                             {selectedcategoryPriceList?.total_price_amount} */}
-                            {splitAmountDetails?.currency_symbol}{" "}
+                            {splitAmountDetails?.currency_symbol}
                             {splitAmountDetails?.total_price}
                           </div>
                         </div>
@@ -1177,7 +1185,7 @@ const ProductLists = () => {
                               ) -
                               parseFloat(selectedcategoryPriceList?.vat_amount)
                             ).toFixed(2)} */}
-                            {splitAmountDetails?.currency_symbol}{" "}
+                            {splitAmountDetails?.currency_symbol}
                             {splitAmountDetails?.vat_tax_amt}
                           </div>
                         </div>
@@ -1199,7 +1207,7 @@ const ProductLists = () => {
                               ) -
                               parseFloat(selectedcategoryPriceList?.vat_amount)
                             ).toFixed(2)} */}
-                            {splitAmountDetails?.currency_symbol}{" "}
+                            {splitAmountDetails?.currency_symbol}
                             {splitAmountDetails?.offer_amt}
                           </div>
                         </div>
@@ -1208,7 +1216,7 @@ const ProductLists = () => {
                             Delivery <br /> Fee (+)
                           </div>
                           <div className="cs-option-amt-right">
-                            {splitAmountDetails?.currency_symbol}{" "}
+                            {splitAmountDetails?.currency_symbol}
                             {splitAmountDetails?.delivery_fee}
                           </div>
                         </div>
@@ -1245,7 +1253,7 @@ const ProductLists = () => {
                           <div className="cs-option-amt-right">
                             {/* {settings?.WebmasterSettings?.currency}{" "}
                             {selectedcategoryPriceList?.final_payable_amount} */}
-                            {splitAmountDetails?.currency_symbol}{" "}
+                            {splitAmountDetails?.currency_symbol}
                             {cartFinalTotal}
                           </div>
                         </div>
@@ -1290,7 +1298,7 @@ const ProductLists = () => {
                       >
                         Checkout{" "}
                         <span className="option-total total-amt">
-                          {splitAmountDetails?.currency_symbol} {cartFinalTotal}
+                          {splitAmountDetails?.currency_symbol}{cartFinalTotal}
                         </span>
                       </button>
                     </div>

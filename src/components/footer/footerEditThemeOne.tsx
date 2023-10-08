@@ -534,11 +534,11 @@ function FooterEditThemeOne() {
                 </div>
               </div>
             </div>
-            <div className="mb-3">
+            <div className="mb-3 mt-1">
               <button
                 type="submit"
                 data-bs-dismiss="modal"
-                className="btn primary-btn"
+                className="btn save-btn"
                 onClick={() => {
                   saveJsonDataToFile();
                 }}

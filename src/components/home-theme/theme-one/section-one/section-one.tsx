@@ -42,8 +42,10 @@ const SectionOneThemeOne: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<any>();
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [popoverOpen, setpopoverOpen] = useState<any>(false);
-  const [errorPostalCode, setErrorPostalCode] = useState<any>("");
+  const [errorPostalCode, setErrorPostalCode] = useState<any>("")
   const [responseGot, setResponseGot] = useState <any>(false);
+
+
   const [error, setError] = useState<string | null>(null); // Added error state
   // const postcodesuggs: any = useSelector<any>(
   //   (state) => state.postalCodeSuggestions
@@ -57,6 +59,7 @@ const SectionOneThemeOne: React.FC = () => {
 
     const updateValue = value.replace(/\s/g, "");
     if (value.length > 1) {
+      console.log(value.length)
       setTimeout(async () => {
         const response = await getData(
           end_points.locationfetchAPi.url + `?keyword=${updateValue}`
@@ -66,8 +69,9 @@ const SectionOneThemeOne: React.FC = () => {
         const fetchdata = data.data.data;
         if(fetchdata && fetchdata instanceof Object && Object.keys(fetchdata).includes("error")){
           setErrorPostalCode(fetchdata?.error?.internal_message);
+        }else{
+          setErrorPostalCode("")
         }
-        
         console.log(fetchdata, "locationfetch response");
         setSuggestions(fetchdata);
         setpopoverOpen(true);
@@ -75,8 +79,10 @@ const SectionOneThemeOne: React.FC = () => {
 
         dispatch(fetchPostalCodes(updateValue));
         setResponseGot(true);
+
+
         //dispatch(fetchPostalCodesApi(updateValue))+
-      }, 1100);
+      }, 0);
       console.log(55555, updateValue);
     } else {
       setpopoverOpen(false);
@@ -190,6 +196,15 @@ const SectionOneThemeOne: React.FC = () => {
     toast.error(errorPostalCode);
     return false
 }
+
+//     if(filteredOptions?.length && !filteredOptions.filter(e=>e.postcode == searchTerm).length){
+//       toast.error("Post code doesn't match! Please enter valid postcode.")
+//      return false
+//    }
+//    if(errorPostalCode.length){
+//     toast.error(errorPostalCode)
+//     return false
+// }
    
     const response = await getData(end_points.checkPreOrderApi.url);
     let validTime = response?.data?.data?.online_order_status;
@@ -300,8 +315,6 @@ const SectionOneThemeOne: React.FC = () => {
                         }}
                         className="ui-autocomplete-input"
                         onChange={(e) => {
-                          setErrorPostalCode("");
-                          setResponseGot(false);
                           handleInputChange(e.target.value);
                         }}
                         autoComplete="off"

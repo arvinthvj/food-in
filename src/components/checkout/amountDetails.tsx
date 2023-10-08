@@ -91,6 +91,8 @@ const AmountDetails: React.FC<AmountDetailsProps> = ({
                             <td className="normal_total_item">
                               {settings?.WebmasterSettings?.currency}
                               &nbsp;
+                              {splitAmountDetails?.currency_symbol}
+
                               {(
                                 parseFloat(subCategory?.quantity) *
                                 parseFloat(subCategory?.price)
@@ -114,7 +116,7 @@ const AmountDetails: React.FC<AmountDetailsProps> = ({
               <div className="cs-option-amt-right">
                 {/* {settings?.WebmasterSettings?.currency}{" "}
                             {selectedcategoryPriceList?.total_price_amount} */}
-                {splitAmountDetails?.currency_symbol || "£"}{" "}
+                {splitAmountDetails?.currency_symbol || "£"}
                 {splitAmountDetails?.total_price || 0}
               </div>
             </div>
@@ -134,7 +136,7 @@ const AmountDetails: React.FC<AmountDetailsProps> = ({
                               ) -
                               parseFloat(selectedcategoryPriceList?.vat_amount)
                             ).toFixed(2)} */}
-                {splitAmountDetails?.currency_symbol || "£"}{" "}
+                {splitAmountDetails?.currency_symbol || "£"}
                 {splitAmountDetails?.vat_tax_amt || 0}
               </div>
             </div>
@@ -158,7 +160,7 @@ const AmountDetails: React.FC<AmountDetailsProps> = ({
                               ) -
                               parseFloat(selectedcategoryPriceList?.vat_amount)
                             ).toFixed(2)} */}
-                {splitAmountDetails?.currency_symbol || "£"}{" "}
+                {splitAmountDetails?.currency_symbol || "£"}
                 {splitAmountDetails?.offer_amt
                   ? splitAmountDetails?.offer_amt
                   : 0}
@@ -167,7 +169,7 @@ const AmountDetails: React.FC<AmountDetailsProps> = ({
             <div className="cs-option-amt-list">
               <div className="cs-option-amt-left">Delivery Fee (+)</div>
               <div className="cs-option-amt-right">
-                {splitAmountDetails?.currency_symbol || "£"}{" "}
+                {splitAmountDetails?.currency_symbol || "£"}
                 {splitAmountDetails?.delivery_fee || 0}
               </div>
             </div>
@@ -188,7 +190,7 @@ const AmountDetails: React.FC<AmountDetailsProps> = ({
               </div>
 
               <div className="cs-option-amt-right">
-                {splitAmountDetails?.currency_symbol || "£"}{" "}
+                {splitAmountDetails?.currency_symbol || "£"}
                 {splitAmountDetails?.cart_final_total || 0}
               </div>
             </div>

@@ -2,6 +2,7 @@ import React, { createContext, useContext } from "react";
 import { AxiosContext } from "../interceptor/interceptor";
 import { useDispatch } from "react-redux";
 import { saveThemeJsonData } from "../../redux/Actions";
+import { data } from "../../components/edit/data";
 export const ApiServiceContext = createContext<any>({});
 
 const ApiServiceProvider = (props: {
@@ -110,7 +111,8 @@ const ApiServiceProvider = (props: {
   const get_cms_data = async () => {
     const response: any = await getData("json_view");
     if (response) {
-      dispatch(saveThemeJsonData(JSON.parse(response.data.data.data)));
+      // dispatch(saveThemeJsonData(JSON.parse(response.data.data.data)));
+      console.log("dhashd0",JSON.parse(response.data.data.data))
     }
   };
 

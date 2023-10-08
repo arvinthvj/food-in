@@ -118,10 +118,13 @@ const SectionOneEditThemeOne = () => {
           </div>
           <div className="modal-content modal-body">
             <div className="edit-section">
-              <h4 className="edit-section-hdr">Title</h4><small>(max 120 char)</small>
+              {/* <h4 className="edit-section-hdr">Title</h4><small>{" "}(max 120 char)</small> */}
               <div className="row">
                 <div className="col">
                   <div className="mb-3">
+                  <label className="form-label">
+                      Title<small>{" "}(max 120 char)</small>
+                    </label>
                     <input
                       type="text"
                       className="form-control"
@@ -135,10 +138,11 @@ const SectionOneEditThemeOne = () => {
               </div>
             </div>
             <div className="edit-section">
-              <h4 className="edit-section-hdr">Paragraph</h4><small>(max 500 char)</small>
+              {/* <h4 className="edit-section-hdr">Paragraph</h4><small>(max 500 char)</small> */}
               <div className="row">
                 <div className="col">
                   <div className="mb-3">
+                  <label className="form-label">Paragraph<small>{" "}(max 500 char)</small></label>
                     <input
                       type="text"
                       className="form-control"
@@ -196,16 +200,16 @@ const SectionOneEditThemeOne = () => {
                         type="text"
                         className="form-control"
                         name="bg_color"
-                        value={
-                          editData?.theme_1?.home?.section_1?.input_section
-                            ?.bg_color
-                        }
+                        value={editData?.theme_1?.home?.section_1?.input_section?.bg_color}
+                        onChange={handleValueChange}
                         maxLength={120}
                       />
                       <ColorPicker
                         name="bg_color"
                         format="hex"
-                        onChange={handleValueChange}
+                        onChange={(e) => {
+                          handleValueChange(e);
+                        }}                        
                         value={
                           editData?.theme_1?.home?.section_1?.input_section
                             ?.bg_color
@@ -226,12 +230,16 @@ const SectionOneEditThemeOne = () => {
                           editData?.theme_1?.home?.section_1?.input_section
                             ?.btn_color
                         }
+                        onChange={handleValueChange}
+
                         maxLength={120}
                       />
                       <ColorPicker
                         name="btn_color"
                         format="hex"
-                        onChange={handleValueChange}
+                        onChange={(e) => {
+                          handleValueChange(e);
+                        }}
                         value={
                           editData?.theme_1?.home?.section_1?.input_section
                             ?.btn_color
@@ -252,12 +260,16 @@ const SectionOneEditThemeOne = () => {
                           editData?.theme_1?.home?.section_1?.input_section
                             ?.placeholder_color
                         }
+                        onChange={handleValueChange}
+
                         maxLength={120}
                       />
                       <ColorPicker
                         name="placeholder_color"
                         format="hex"
-                        onChange={handleValueChange}
+                        onChange={(e) => {
+                          handleValueChange(e);
+                        }}  
                         value={
                           editData?.theme_1?.home?.section_1?.input_section
                             ?.placeholder_color
@@ -338,12 +350,12 @@ const SectionOneEditThemeOne = () => {
                 </div>
               </div>
             </div>
-            <div className="mb-3">
+            <div className="mb-3 mt-1">
               <button
                 type="submit"
                 onClick={saveJsonData}
                 data-bs-dismiss="modal"
-                className="btn primary-btn"
+                className="btn save-btn"
               >
                 Save Changes
               </button>

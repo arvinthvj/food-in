@@ -56,6 +56,8 @@ const deleteAvatarPictureApi = { url: "profile/remove-avatar", service: "" };
 
 // Addresses
 const editAddressApi = { url: "profile/my_addresses/update", service: "" };
+const existingAddressApi = { url: "profile/my_addresses/edit", service: "" };
+
 const updateChangedPasswordApi = {
   url: "profile/change_password",
   service: "",
@@ -101,4 +103,5 @@ export const end_points: Record<string, EndPoint> = {
   locationfetchAPi,
   PolicyApi,
   repeatOrderApi,
+  existingAddressApi,
 };

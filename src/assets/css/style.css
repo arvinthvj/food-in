@@ -494,6 +494,12 @@ img {
     text-transform: uppercase;
     font-weight: 500;
 }
+.order-det-btn:hover {
+    color: #dd3b0f;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+}
 .sidebar-nav {
 	width: 100%;
 	position: relative;
@@ -2052,6 +2058,12 @@ ul.header-link li ul.notification-dropdown p a.header-notification {
     padding: 0px 0px 0px 0px !important;
 }
 
+h3.card-title {
+    padding-bottom: 9px;
+}
+.custmizecheckbox{
+    padding-left: 9px;
+}
 .notify-seeall a {
     font-size: 12px !important;
     font-weight: 600 !important;
@@ -3634,6 +3646,15 @@ select.mdb-select {
     font-weight: 500;
     font-size: 13px;
 }
+button.save-btn{
+    background: var(--primary-color);
+    color: #fff;
+
+}
+button.save-btn:hover {
+    background: var(--secondary-color);
+    color: #fff;
+}
 
 button.account-btn {
     background: var(--primary-color);
@@ -3651,7 +3672,7 @@ button.account-btn:hover {
 
 .Forgot-password {
     text-decoration: none;
-    color: #383838;
+    /* color: #383838; */
 }
 
 .register-link a,
@@ -8833,8 +8854,8 @@ input.area-input-form {
 .cardBox{
     display: flex;
     flex-direction: column;
-    min-height: 35vh;
-    padding: 20px;
+    min-height: 25vh;
+    padding: 12px;
     border: 1px solid #a89e9e59;
     border-radius: .25rem;
 }

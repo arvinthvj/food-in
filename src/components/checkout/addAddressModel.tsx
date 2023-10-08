@@ -14,18 +14,26 @@ interface AddAddressProps {
 const schema = yup.object().shape({
   register_name: yup.string().required("Name is required"),
 
-  register_mobile: yup.string()
-  .required("Mobile is required")
-  .test("is-ten-digits", "Mobile number must be 10 digits", (value) => {
-    if (value && value.length === 10) {
-      return true;
-    }
-    return false;
-  }),
+  register_mobile: yup
+    .string()
+    .required("Mobile is required")
+    .matches(/^[0-9]{10}$/, "Mobile number must be 10 digits"),
+
+  // .test("is-ten-digits", "Mobile number must be 10 digits", (value) => {
+  //   if (value && value.length === 10) {
+  //     return true;
+  //   }
+  //   return false;
+  // }),
   register_address: yup.string().required("Address is required"),
   register_address2: yup.string(),
-  register_city: yup.string().required("City is required"),
-  register_zip: yup.string().required("ZIP code is required"),
+  register_city: yup.string()
+  .required("City is required")
+  .matches(/^[^0-9]*$/, 'City should not contain numbers'),
+  register_zip: yup
+    .string()
+    .required("Pincode is required")
+    .matches(/^[0-9A-Za-z\s-]+$/, "Invalid Pincode"),
   primary: yup.boolean().optional(),
 });
 const AddAddressModel: React.FC<AddAddressProps> = ({
@@ -85,7 +93,7 @@ const AddAddressModel: React.FC<AddAddressProps> = ({
             <h4>Add New Address</h4>
             <div className="row">
               <div className="col-md-6 mb-3">
-                <label>Title</label>
+                <label>Name</label>
                 <Controller
                   name="register_name"
                   control={newAddressControl}
@@ -214,7 +222,7 @@ const AddAddressModel: React.FC<AddAddressProps> = ({
                         type="checkbox"
                         className="custom-control"
                         {...field}
-                      />
+                      />{" "}
                       <span>Primary Address</span>
                     </>
                   )}

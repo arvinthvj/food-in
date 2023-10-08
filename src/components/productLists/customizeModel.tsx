@@ -151,7 +151,7 @@ const CustomizeModel: React.FC<CustomizeModelProps> = ({
               </h4>
             </div>
             <div>
-              <h4>£ {totalPrice}</h4>
+              <h4>£{totalPrice}</h4>
             </div>
           </div>
           <h6>Options:</h6>
@@ -183,6 +183,7 @@ const CustomizeModel: React.FC<CustomizeModelProps> = ({
 
           {customizeData?.detail?.add_on_groups.map((val: any, index: any) => {
             return (
+              
               <>
                 {index == 0 && (
                   <div>
@@ -194,6 +195,7 @@ const CustomizeModel: React.FC<CustomizeModelProps> = ({
                         <div>
                           <input
                             type="checkbox"
+                            className="mr-5"
                             value={a?.id}
                             // checked={a?.checked == true ? true : false}
                             name={a?.name}
@@ -209,9 +211,9 @@ const CustomizeModel: React.FC<CustomizeModelProps> = ({
                                 a?.check == true ? true : false
                               );
                             }}
-                          />
+                          />{" "}
                           <span>
-                            {a?.name}(£ {a?.price})
+                            {a?.name}(£{a?.price})
                           </span>
                         </div>
                       );
@@ -244,7 +246,7 @@ Please mention here`}
               Cancel
             </button>
             <span>
-              QTY: <span>1</span>{" "}
+              {/* QTY: <span>1</span>{" "} */}
               <button
                 className="btn btn-primary"
                 onClick={() => {
@@ -260,7 +262,7 @@ Please mention here`}
                   }, 100);
                 }}
               >
-                Add
+                Save
               </button>
             </span>
           </div>

@@ -25,12 +25,12 @@ const OrderPlacedModel: React.FC<OrderPlacedProps> = ({
         <div className="modal-content">
           <div className="modal-body">
             <div className="cardBox">
-              <h3>Order Placed successfully</h3>
+              <h3>Order placed successfully</h3>
               <div className="pt-3">
                 You have successfully placed your order. Your Order ID is{" "}
                 {message?.order_reference}
               </div>
-              <div className="d-flex gap-3 p-2 pt-5 justify-content-end">
+              <div className="d-flex gap-3 p-1 pt-2 justify-content-end">
                 <Link
                   className="btn btn-primary"
                   to={`/orderView/${message?.order_id}`}

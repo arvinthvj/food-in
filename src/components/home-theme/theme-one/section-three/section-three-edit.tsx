@@ -64,10 +64,13 @@ const SectionThreeEditThemeOne = () => {
           </div>
           <div className="modal-content modal-body">
             <div className="edit-section">
-              <h4 className="edit-section-hdr">Title</h4><small>(max 120 char)</small>
+              {/* <h4 className="edit-section-hdr">Title</h4><small>(max 120 char)</small> */}
               <div className="row">
                 <div className="col">
                   <div className="mb-3">
+                  <label className="form-label">
+                      Title<small>{" "}(max 120 char)</small>
+                    </label>
                     <input
                       type="text"
                       className="form-control"
@@ -81,10 +84,12 @@ const SectionThreeEditThemeOne = () => {
               </div>
             </div>
             <div className="edit-section">
-              <h4 className="edit-section-hdr">Paragraph</h4><small>(max 500 char)</small>
+              {/* <h4 className="edit-section-hdr">Paragraph</h4><small>(max 500 char)</small> */}
               <div className="row">
                 <div className="col">
                   <div className="mb-3">
+                  <label className="form-label">Paragraph<small>{" "}(max 500 char)</small></label>
+
                     <input
                       type="text"
                       className="form-control"
@@ -97,12 +102,12 @@ const SectionThreeEditThemeOne = () => {
                 </div>
               </div>
             </div>
-            <div className="mb-3">
+            <div className="mb-3 mt-1">
               <button
                 type="submit"
                 onClick={saveJsonData}
                 data-bs-dismiss="modal"
-                className="btn primary-btn"
+                className="btn save-btn"
               >
                 Save Changes
               </button>

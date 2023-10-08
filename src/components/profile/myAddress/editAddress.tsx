@@ -13,13 +13,21 @@ import { end_points } from "../../../core/end_points/end_points";
 import { ApiServiceContext } from "../../../core/Api/api.service";
 
 const validationSchema = yup.object().shape({
-  label: yup.string().required("Label is required"),
-  address_line_1: yup.string().required("Address Line 1 is required"),
-  address_line_2: yup.string().required("Address Line 2 is required"),
-  city: yup.string().required("Town/City is required"),
-  pincode: yup.string().required("Pincode is required"),
-  mobile_number: yup.string().required("Mobile Number is required"),
-  // .matches(/^(?:(?:(?:00\s?|\+)1\s?|0)7(?:[1345789]\d{2}|624)\s?\d{3}\s?\d{3})$/, 'Invalid mobile number'),
+  label: yup.string().required("Title is required"),
+  address_line_1: yup.string().required("Address is required"),
+  address_line_2: yup.string().optional(),
+  city: yup
+    .string()
+    .required("Town/City is required")
+    .matches(/^[A-Za-z., ;'"()@]+$/, "Town/City can only contain alphabets"),
+  pincode: yup
+    .string()
+    .required("Pincode is required")
+    .matches(/^[0-9A-Za-z\s-]+$/, "Invalid Pincode"),
+  mobile_number: yup
+    .string()
+    .required("Mobile Number is required")
+    .matches(/^\d{6,10}$/, "Mobile Number should be 6 to 10 digits"),
 });
 
 function EditAddress() {
@@ -33,9 +41,6 @@ function EditAddress() {
   const [postalCodeList, setPostalCodeList] = useState([]);
 
   const rand = Math.random();
-
-  const base_url = "https://api.bestatrestaurant.com";
-  // const base_url = "http://www.bestatlaundry.test";
 
   const token = localStorage.getItem("token");
   const { postData } = useContext(ApiServiceContext);
@@ -58,29 +63,18 @@ function EditAddress() {
   });
 
   const address: any = params?.address && JSON.parse(params?.address);
-  useEffect(() => {
+  const existingAddressApi = async () => {
     const payload = {
       edit_address_id: address,
     };
-    axios({
-      method: "post",
-      url: `${base_url}/api/profile/my_addresses/edit`,
-      headers: {
-        Accept: "application/json",
-        "Access-Control-Allow-Methods": "GET, POST",
-        Authorization: "Bearer " + token,
-      },
-      data: payload,
-    })
-      .then((response) => {
-        if (response.status !== 401) {
-          setProfile(response.data.data.address);
-        }
-      })
-      .catch(function (error) {
-        // Handle error
-      });
+    const response = await postData(end_points.existingAddressApi.url, payload);
 
+    if (response?.status !== 401) {
+      setProfile(response?.data?.data?.address);
+    }
+  };
+  useEffect(() => {
+    existingAddressApi();
     if (state) {
       setPostalCodeList(state.postalCodeList);
     }
@@ -227,10 +221,12 @@ function EditAddress() {
                         accept-charset="UTF-8"
                         onSubmit={handleSubmit(handleAddressSubmit)}
                       >
+                      &nbsp;
+
                         <div className="row">
                           <div className="col-md-6 form-group profile-form">
                             <label className="form-label" htmlFor="label">
-                              Title<span className="text-danger">*</span>
+                              Name<span className="text-danger">*</span>
                             </label>
                             <Controller
                               name="label"
@@ -303,7 +299,7 @@ function EditAddress() {
                               htmlFor="address_line_2"
                             >
                               Address2 (Optional)
-                              <span className="text-danger">*</span>
+                              {/* <span className="text-danger">*</span> */}
                             </label>
                             <Controller
                               name="address_line_2"

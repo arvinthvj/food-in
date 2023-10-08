@@ -2,6 +2,7 @@ import React, { createContext, useContext } from "react";
 import axios, { AxiosInstance } from "axios";
 import { SpinnerContext } from "../../shared/shared.module";
 import { end_points } from "../end_points/end_points";
+import { toast } from "react-toastify";
 
 export const AxiosContext = createContext<any>({});
 
@@ -82,7 +83,7 @@ const AxiosProvider = (props: { children: any }) => {
     },
     async (error: any) => {
       hideLoader();
-      // await handleResponseStatus(error.response);
+      await handleResponseStatus(error.response);
       return Promise.reject(error);
     }
   );
@@ -94,18 +95,19 @@ const AxiosProvider = (props: { children: any }) => {
         // showError(response.data.message);
         break;
       case 500:
-        // showError("Internal server error");
+        toast.error("Internal server error");
         // showServerError("Internal server error");
         break;
       case 404:
-        // showError("API Request not found");
+        toast.error("API Request not found");
         break;
       case 401:
-        // showError("Unauthorized");
-        // localStorage.removeItem("token");
-        // setTimeout(() => {
-        //   window.location.href = "/login";
-        // }, 1000);
+        toast.error("Unauthorized");
+        localStorage.removeItem("token");
+        localStorage.removeItem("cartInformationData");
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 1000);
         break;
       default:
         // showError("Error type not found");

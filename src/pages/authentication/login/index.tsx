@@ -221,7 +221,6 @@ function Login() {
 
       // const result = await response.then(response => response);
       if (response) {
-        debugger
         if (response.data.code === "-1") {
           toast.error(response.data.message);
           // notify(response.data.Response.response_message)

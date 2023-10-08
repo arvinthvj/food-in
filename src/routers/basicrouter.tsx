@@ -46,9 +46,6 @@ import SignUp from "../components/signUp";
 import Login from "../pages/authentication/login";
 import Corporate from "../pages/feature/corporate";
 import CheckOut from "../components/checkout";
-import OpeningTimes from "../components/openingTimes";
-import DeliveryInfo from "../components/deliveryInfo";
-import SpecialOffers from "../components/specialOffers";
 import ContactUs from "../components/contactUs";
 import AllergyAdvise from "../components/allergyAdvise";
 import AreaNotCovered from "../components/areaNotCovered";
@@ -58,7 +55,13 @@ import CookiePolicy from "../components/cookiePolicy";
 import ChangePassword from "../components/profile/myProfile/changePassword";
 import EditHomeTheme from "../components/edit/edit";
 import EditAboutus from "../components/edit/aboutus";
-import AboutUs from "../components/home-theme/theme-one/aboutUs";
+import AboutUs from "../components/home-theme/theme-one/pages-theme/aboutUs/aboutus";
+import OpeningTimes from "../components/home-theme/theme-one/pages-theme/openingtimes/openingtimes";
+import EditOpeningTimes from "../components/edit/openingtimes";
+import DeliveryInfo from "../components/home-theme/theme-one/pages-theme/deliveries/deliveries";
+import Editdeliveries from "../components/edit/deliveries";
+import Editspecialoffers from "../components/edit/specialoffer";
+import SpecialOffers from "../components/home-theme/theme-one/pages-theme/specialOffers/specialoffers";
 
 const userData = { name: "John", token: "test" };
 
@@ -90,11 +93,17 @@ function Basicrouter() {
   return (
     <>
       <ScrollToTop>
-        {splitURL[1] !== "shopHome" && splitURL[1] !== "edit-home" && <Header />}
+        {splitURL[1] !== "shopHome" && splitURL[1] !== "edit-home" && (
+          <Header />
+        )}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/edit-home" element={<EditHomeTheme />} />
           <Route path="/edit-aboutus" element={<EditAboutus />} />
+          <Route path="/edit-openingtimes" element={<EditOpeningTimes />} />
+          <Route path="/edit-deliveryinfo" element={<Editdeliveries />} />
+          <Route path="/edit-specialoffers" element={<Editspecialoffers />} />
+
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/areaCovered" element={<AreaCovered />} />
           <Route path="/notifications" element={<AllNotifications />} />
@@ -192,7 +201,9 @@ function Basicrouter() {
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/allergyadvise" element={<AllergyAdvise />} />
         </Routes>
-        {splitURL[1] !== "shopHome" && splitURL[1] !== "edit-home" &&  <Footer />}
+        {splitURL[1] !== "shopHome" && splitURL[1] !== "edit-home" && (
+          <Footer />
+        )}
       </ScrollToTop>
     </>
   );

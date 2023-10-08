@@ -37,13 +37,15 @@ const schema = yup.object().shape({
     .string()
     .email("Invalid email")
     .required("Email is required"),
-  register_mobile: yup.string().required("Mobile is required")
-  .test("is-ten-digits", "Mobile number must be 10 digits", (value) => {
-    if (value && value.length === 10) {
-      return true;
-    }
-    return false;
-  }),
+  register_mobile: yup
+    .string()
+    .required("Mobile is required")
+    .test("is-ten-digits", "Mobile number must be 10 digits", (value) => {
+      if (value && value.length === 10) {
+        return true;
+      }
+      return false;
+    }),
   register_password: yup.string().required("Password is required"),
   register_address: yup.string().required("Address is required"),
   register_address2: yup.string(),
@@ -167,6 +169,7 @@ const CheckOut = () => {
   const menuRef = React.useRef<HTMLDivElement>(null);
   const paySubmitRef = useRef<HTMLButtonElement>(null);
   const payConfirmationSubmitRef = useRef<HTMLButtonElement>(null);
+  const myAddresref = useRef<HTMLButtonElement>(null);
 
   const dispatch = useDispatch<any>();
 
@@ -222,8 +225,8 @@ const CheckOut = () => {
 
   useEffect(() => {}, [getValues()]);
   const timeSlotOption =
-    timeSlot[0]?.time_slots && timeSlot[0]?.time_slots?.length > 0
-      ? timeSlot[0]?.time_slots?.map((val: any) => {
+    timeSlot?.time_slots && timeSlot?.time_slots?.length > 0
+      ? timeSlot?.time_slots?.map((val: any) => {
           return {
             value: val,
             label: val,
@@ -278,22 +281,34 @@ const CheckOut = () => {
     dispatch(clearUserProductCategories);
     dispatch(clearUserSplitPrice);
   };
+  console.log(
+    paymentSuccess,
+    paymentSuccess?.response?.length,
+    "paymentSuccess"
+  );
   const onSubmit = async (data: any) => {
     try {
       if (loading) {
         return;
       }
       setLoading(true);
-      showLoader();
       if (selectedItem == null && data?.register_address == "") {
-        console.log(selectedItem == null && data?.register_address == "", "gh");
+        if (addressList?.length > 0) {
+          toast.error("please select the delivery address!");
+          myAddresref?.current?.focus();
+          return;
+        } else {
+          // console.log(
+          //   selectedItem == null && data?.register_address == "",
+          //   "gh"
+          // );
 
-        setLoading(false);
-        hideLoader();
-        toast.error("please enter the delivery address ");
-        setNewAddress(true);
+          setLoading(false);
+          toast.error("please enter the delivery address!");
+          setNewAddress(true);
 
-        return;
+          return;
+        }
       }
       if (data && paymentType && data.paymentType === "credit") {
         if (data.paymentType === "credit" && !data.cardHolderName) {
@@ -303,12 +318,11 @@ const CheckOut = () => {
           });
           // console.log(!data.cardHolderName, "!data.cardHolderName");
 
-          hideLoader();
-
           return;
         } else if (paymentType && !paymentSuccess.success) {
           if (!paymentSubmitted) {
             paySubmitRef.current?.click(); //second click
+            showLoader();
             console.count("clickedpayment");
             setPaymentSubmitted(true);
           }
@@ -316,12 +330,10 @@ const CheckOut = () => {
       }
       if (paymentType && paymentSuccess.success === false) {
         setPaymentSubmitted(false);
-        // console.log("paymentFailed");
+        console.log("paymentFailed");
 
-        // hideLoader();
         return;
       } else {
-        debugger
         // if (data && paymentType && paymentSuccess.success === true) {
         //   payConfirmationSubmitRef?.current?.click();
         //   console.log("finally clicked");
@@ -401,11 +413,11 @@ const CheckOut = () => {
         if (response.data.code === "200") {
           setLoading(false);
           hideLoader();
-
           dispatch(getUserDetails(response.data));
           // setLoginResult(response.data);
           localStorage.setItem("token", response.data.data.token);
-          ;
+          
+
           toast.success(response.data.message);
           setOrderPlacedbool(true);
           setOrderPlacedRes(response.data.data);
@@ -459,8 +471,8 @@ const CheckOut = () => {
     if (response) {
       const Slots = response.data.data.pre_order_date_time;
       const timeSlotOption =
-        Slots[0]?.time_slots && Slots[0]?.time_slots?.length > 0
-          ? Slots[0]?.time_slots?.map((val: any) => {
+        Slots?.time_slots && Slots?.time_slots?.length > 0
+          ? Slots?.time_slots?.map((val: any) => {
               return {
                 value: val,
                 label: val,
@@ -609,7 +621,11 @@ const CheckOut = () => {
                             Add New
                           </button>
                         </div>
-                        <div className="mainAddress">
+                        <div
+                          className="mainAddress"
+                          tabIndex={0}
+                          ref={myAddresref}
+                        >
                           {addressList?.map((val: any, index: any) => {
                             return (
                               <>
@@ -867,10 +883,6 @@ const CheckOut = () => {
                               <Controller
                                 name="pre_order_time_slot"
                                 control={mainControl}
-                                // defaultValue={pretimeSlot[0]}
-                                // rules={{
-                                //   required: "This field is required",
-                                // }}
                                 render={({ field }) => (
                                   <Select
                                     isDisabled={
@@ -892,8 +904,6 @@ const CheckOut = () => {
                                     options={
                                       timeSlotOption ? timeSlotOption : []
                                     }
-                                    // defaultInputValue={pretimeSlot[0]?.label}
-
                                     defaultValue={
                                       pretimeSlot && pretimeSlot?.label
                                         ? {

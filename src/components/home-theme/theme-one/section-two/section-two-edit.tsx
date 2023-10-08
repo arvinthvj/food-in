@@ -127,7 +127,7 @@ const SectionTwoEditThemeOne = () => {
                 <div className="col">
                   <div className="mb-3">
                     <label className="form-label">
-                      Title<small>(max 120 char)</small>
+                      Title<small>{" "}(max 120 char)</small>
                     </label>
                     <input
                       type="text"
@@ -140,7 +140,7 @@ const SectionTwoEditThemeOne = () => {
                   </div>
                   <div className="mb-3">
                     <label className="form-label">
-                      Sub heading top<small>(max 120 char)</small>
+                      Sub heading top<small>{" "}(max 120 char)</small>
                     </label>
                     <input
                       type="text"
@@ -154,7 +154,7 @@ const SectionTwoEditThemeOne = () => {
                     />
                   </div>
                   <div className="mb-3">
-                    <label className="form-label">Paragraph<small>(max 1200 char)</small></label>
+                    <label className="form-label">Paragraph<small>{" "}(max 1200 char)</small></label>
                     <input
                       type="text"
                       className="form-control"
@@ -180,16 +180,20 @@ const SectionTwoEditThemeOne = () => {
                           editData?.theme_1?.home?.section_2?.input_section
                             ?.bg_color
                         }
+                        onChange={handleChange}
+
                         maxLength={120}
                       />
                       <ColorPicker
                         name="bg_color"
                         format="hex"
-                        onChange={handleChange}
                         value={
                           editData?.theme_1?.home?.section_2?.input_section
                             ?.bg_color
                         }
+                        onChange={(e) => {
+                          handleChange(e);
+                        }}
                       />
                     </div>
                   </div>
@@ -206,16 +210,20 @@ const SectionTwoEditThemeOne = () => {
                           editData?.theme_1?.home?.section_2?.input_section
                             ?.btn_color
                         }
+                        onChange={handleChange}
+
                         maxLength={120}
                       />
                       <ColorPicker
                         name="btn_color"
                         format="hex"
-                        onChange={handleChange}
                         value={
                           editData?.theme_1?.home?.section_2?.input_section
                             ?.btn_color
                         }
+                        onChange={(e) => {
+                          handleChange(e);
+                        }}
                       />
                     </div>
                   </div>
@@ -306,12 +314,12 @@ const SectionTwoEditThemeOne = () => {
                 </div>
               </div>
             </div>
-            <div className="mb-3">
+            <div className="mb-3 mt-1">
               <button
                 type="submit"
                 onClick={saveJsonData}
                 data-bs-dismiss="modal"
-                className="btn primary-btn"
+                className="btn save-btn"
               >
                 Save Changes
               </button>

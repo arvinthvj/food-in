@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 
 function SectionThemeOneEditor() {
   const [editedHeaderData, setHeaderJsonData] = useState<any>();
+  const [savedData, setSavedData] = useState<any>(); 
+
   const dispatch = useDispatch<any>();
   const jsonData: any = useSelector<any>((state) => state.homeJsonList);
   const { fetchCroppedImage, save_cms_data } = useContext(ApiServiceContext);
@@ -47,10 +49,19 @@ function SectionThemeOneEditor() {
      
     }));
   };
+  //!editedHeaderData?.theme_1?.home?.header?.secondary_color.length && !editedHeaderData?.theme_1?.home?.header?.primary_color.length 
+//  && !editedHeaderData?.theme_1?.home?.section_1?.is_section_enable &&
 
   const saveHeaderJsonDataToFile = () => {
+    let sectionsArray= editedHeaderData?.theme_1?.home?.sections
+    if(sectionsArray && sectionsArray.filter((e:any)=> !e.is_section_enable).length == sectionsArray.length){
+      toast.error("Please Select the any of the sections ")
+      
+    }else{
       save_cms_data(editedHeaderData);
-      console.log("check",editedHeaderData?.theme_1?.home?.section_1?.is_section_enable)
+
+    }
+    
   };
 
   useEffect(() => {
@@ -61,7 +72,14 @@ function SectionThemeOneEditor() {
 
   useEffect(() => {
     setHeaderJsonData(jsonData);
+    setSavedData(jsonData)
+
   }, [jsonData]);
+
+  const handleClose =()=>{
+    setHeaderJsonData(savedData);
+    
+  }
 
   return (
     <>
@@ -74,6 +92,8 @@ function SectionThemeOneEditor() {
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              onClick={handleClose}
+
             ></button>
           </div>
           <div className="modal-content modal-body">
@@ -160,30 +180,13 @@ function SectionThemeOneEditor() {
               </div>
             </div>
 
-            <div className="mb-3">
+            <div className="mb-3 mt-1">
               <button
                 type="submit"
-                id="themeEditSubmit"
-                className="btn primary-btn"
-                onClick={(e) => {
-                  debugger
-
-                  let sectionsArray = editedHeaderData?.theme_1?.home?.sections;
-                  if(sectionsArray && sectionsArray.filter((e:any)=> !e.is_section_enable).length == sectionsArray.length){
-                    toast("Please Select the any of the sections ")
-                    
-                  }
-                  else{
-                    document.querySelector('#themeEditSubmit')?.setAttribute('data-bs-dismiss', 'modal');
-              
-                    // Trigger a click event to hide the modal
-                    document.querySelector('#themeEditSubmit')?.click();
-                    setTimeout(() => {
-                      document.querySelector('#themeEditSubmit')?.removeAttribute('data-bs-dismiss');
-                    }, 100);
-                    saveHeaderJsonDataToFile();
-                  }
-                 
+                data-bs-dismiss="modal"
+                className="btn save-btn"
+                onClick={() => {
+                  saveHeaderJsonDataToFile();
                 }}
               >
                 Save Changes

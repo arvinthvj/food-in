@@ -8,6 +8,7 @@ import { end_points } from "../../../core/end_points/end_points";
 import { ApiServiceContext } from "../../../core/Api/api.service";
 import { Link } from "react-router-dom";
 import { setRepeatOrderid } from "../../../redux/Actions/checkoutPageActions";
+import moment from "moment";
 
 const OrderView: React.FC = () => {
   const [orderDetails, setOrderDetails] = useState<any>([]);
@@ -169,7 +170,9 @@ const OrderView: React.FC = () => {
                   </div>
                   <div className="row mb-2">
                     <div className="col-6">Ordered On:</div>
-                    <div className="col-6">Sat, Jun 24, 2023 11:42 AM</div>
+                    <div className="col-6">
+                      {moment().format("ddd, MMM D, YYYY h:mm A")}
+                    </div>
                   </div>
                   <div className="row mb-2">
                     <div className="col-6">Order Status:</div>
@@ -253,7 +256,7 @@ const OrderView: React.FC = () => {
                             <td colSpan={2}></td>
                             <td>Sub Total</td>
                             <td>
-                              {currency_symbol}{" "}
+                              {currency_symbol}
                               {
                                 orderDetails?.properties?.cart_checkout_data
                                   ?.sub_total

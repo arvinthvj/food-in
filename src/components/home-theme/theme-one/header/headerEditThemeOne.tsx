@@ -117,7 +117,7 @@ const HeaderEditThemeOne = () => {
               <h4 className="edit-section-hdr">Location</h4>
               <div className="row">
                 <div className="col">
-                  <label className="form-label">&nbsp;</label>
+                  {/* <label className="form-label">&nbsp;</label> */}
                   <div className="mb-3">
                     <input
                       type="text"
@@ -152,15 +152,7 @@ const HeaderEditThemeOne = () => {
                 </div>
                 <div className="col-auto">
                   <div className="mb-3">
-                    <label className="form-label">
-                      {editData?.theme_1?.home?.header?.order_details
-                        ?.online_order
-                        ? "Close "
-                        : "Open "}
-                      Online Orders
-                    </label>
-                    <div className="form-check">
-                      <input
+                  <input
                         className="form-check-input"
                         type="checkbox"
                         name="online_order"
@@ -169,8 +161,18 @@ const HeaderEditThemeOne = () => {
                           editData?.theme_1?.home?.header?.order_details
                             ?.online_order
                         }
-                      />
-                    </div>
+                      />{" "}
+                    <label className="form-label">
+                      
+                      {editData?.theme_1?.home?.header?.order_details
+                        ?.online_order
+                        ? "Close "
+                        : "Open "}
+                      Online Orders
+                    </label>
+                    {/* <div className="form-check"> */}
+                     
+                    {/* </div> */}
                   </div>
                 </div>
               </div>
@@ -195,7 +197,7 @@ const HeaderEditThemeOne = () => {
                   </div>
                 </div>
                 <div className="col">
-                  <label className="form-label">Timimng</label>
+                  <label className="form-label">Time</label>
                   <div className="mb-3">
                     <input
                       type="text"
@@ -232,7 +234,7 @@ const HeaderEditThemeOne = () => {
                   </div>
                 </div>
                 <div className="col">
-                  <label className="form-label">Timing</label>
+                  <label className="form-label">Time</label>
                   <div className="mb-3">
                     <input
                       type="text"
@@ -263,12 +265,16 @@ const HeaderEditThemeOne = () => {
                         value={
                           editData?.theme_1?.home?.header?.nav?.nav_bg_color
                         }
+                        onChange={handleHeaderChange}
+
                         maxLength={120}
                       />
                       <ColorPicker
                         name="nav_bg_color"
                         format="hex"
-                        onChange={handleHeaderChange}
+                        onChange={(e) => {
+                          handleHeaderChange(e);
+                        }}
                         value={
                           editData?.theme_1?.home?.header?.nav?.nav_bg_color
                         }
@@ -287,12 +293,16 @@ const HeaderEditThemeOne = () => {
                         value={
                           editData?.theme_1?.home?.header?.nav?.menu_font_color
                         }
+                        onChange={handleHeaderChange}
+
                         maxLength={120}
                       />
                       <ColorPicker
                         name="menu_font_color"
                         format="hex"
-                        onChange={handleHeaderChange}
+                        onChange={(e) => {
+                          handleHeaderChange(e);
+                        }}
                         value={
                           editData?.theme_1?.home?.header?.nav?.menu_font_color
                         }
@@ -312,12 +322,16 @@ const HeaderEditThemeOne = () => {
                           editData?.theme_1?.home?.header?.nav
                             ?.menu_font_color_hover
                         }
+                        onChange={handleHeaderChange}
+
                         maxLength={120}
                       />
                       <ColorPicker
                         name="menu_font_color_hover"
                         format="hex"
-                        onChange={handleHeaderChange}
+                        onChange={(e) => {
+                          handleHeaderChange(e);
+                        }}
                         value={
                           editData?.theme_1?.home?.header?.nav
                             ?.menu_font_color_hover
@@ -338,12 +352,16 @@ const HeaderEditThemeOne = () => {
                           editData?.theme_1?.home?.header?.nav
                             ?.menu_font_color_active
                         }
+                        onChange={handleHeaderChange}
+
                         maxLength={120}
                       />
                       <ColorPicker
                         name="menu_font_color_active"
                         format="hex"
-                        onChange={handleHeaderChange}
+                        onChange={(e) => {
+                          handleHeaderChange(e);
+                        }}
                         value={
                           editData?.theme_1?.home?.header?.nav
                             ?.menu_font_color_active
@@ -354,12 +372,13 @@ const HeaderEditThemeOne = () => {
                 </div>
               </div>
             </div>
-            <div className="mb-3">
+            <div className="mb-3 mt-1">
               <button
                 type="submit"
                 onClick={saveJsonData}
                 data-bs-dismiss="modal"
-                className="btn primary-btn"
+                className="btn save-btn"
+                // className="btn account-btn"
               >
                 Save Changes
               </button>

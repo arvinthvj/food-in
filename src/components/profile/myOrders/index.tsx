@@ -320,7 +320,7 @@ function MyOrders() {
                               </div>
                               <p className="mb-0">
                                 Total amount{" "}
-                                <strong>£ {item?.total_price}</strong>
+                                <strong>£{item?.total_price}</strong>
                               </p>
                             </div>
                           </div>
@@ -460,19 +460,16 @@ function MyOrders() {
                       <span>«</span>
                     </li>
                     {pagination.pages &&
-                      pagination.pages.map((page: number, idx: number) => {
-                        debugger
-                        return (
-                          <li
-                            onClick={() => handlePagination(page)}
-                            className={`${
-                              page === pagination.currentPage ? "" : ""
-                            }`}
-                          >
-                            <span>{pagination.currentPage} </span>
-                          </li>
-                        )
-                      })}
+                      pagination.pages.map((page: number, idx: number) => (
+                        <li
+                          onClick={() => handlePagination(page)}
+                          className={`${
+                            page === pagination.currentPage ? "active" : ""
+                          }`}
+                        >
+                          <span>{pagination.currentPage} </span>
+                        </li>
+                      ))}
                     <li onClick={() => handlePagination(0, "next")}>
                       <span>»</span>
                     </li>

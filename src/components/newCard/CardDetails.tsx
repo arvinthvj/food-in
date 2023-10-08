@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { SpinnerContext } from "../../shared/shared.module";
 
 interface cardDetails {
   paySubmitRef: any;
@@ -16,6 +17,7 @@ const CardDetails: React.FC<cardDetails> = ({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
   const [processing, setProcessing] = useState(false);
+  const { showLoader, hideLoader } = useContext(SpinnerContext);
 
   const handleSubmit = async (event: React.FormEvent) => {
     console.count("paymentCall");
@@ -41,6 +43,7 @@ const CardDetails: React.FC<cardDetails> = ({
 
       if (result.error) {
         setError(result.error.message);
+        hideLoader();
       } else {
         setError(null);
         setSuccess(true);
