@@ -15,6 +15,7 @@ const SpecialOffersEditThemeOne = () => {
     const { fetchCroppedImage, save_cms_data } = useContext(ApiServiceContext);
     const [editData, setEditData] = useState<any>();
     const [cropImageHeight, setCropImageHeight] = useState("");
+    const [imagefrom, setimageFrom] = useState<any>("");
     const [cropImageWidth, setCropImageWidth] = useState("");
     const [selectedCropImage, setSelectedCropImage] = useState("");
     const [showCropModal, setShowCropModal] = useState<boolean>(false);
@@ -102,19 +103,24 @@ const SpecialOffersEditThemeOne = () => {
       setShowCropModal(true);
     };
   
-    const handleImageChangecardImg = () => {
+    const handleImageChangecardImg = (image:any) => {
       setEditData((prevJsonData: any) => ({
         ...prevJsonData,
         theme_1: {
             specialoffers: {
               ...prevJsonData.theme_1.specialoffers,
-              cardImg: CardImg
+              cardImg: image
             },
         },
       }));
+      setimageFrom("")
     };
   
-    const handleImageChange = (image: string, index: any) => {
+    const handleImageChange = (image: string, index: any, from:any) => {
+      if(from == "cardImage"){
+        handleImageChangecardImg(image);
+        return false
+      }
       setEditData((prevJsonData: any) => ({
           ...prevJsonData,
           theme_1: {
@@ -125,18 +131,28 @@ const SpecialOffersEditThemeOne = () => {
             },
           },
         }));
+        setimageFrom("")
     };
   
   
     const handleCroppedImage = async (image: any) => {
+      debugger
       setShowCropModal(false);
       setImagedata(image);
       const imageLink = await fetchCroppedImage(image);
       if (imageLink != false) {
-        handleImageChange(imageLink, activeTab);
+        handleImageChange(imageLink, activeTab, imagefrom);
       }
     };
-  
+    // const handleCroppedCardImage = async (image: any) => {
+    //   debugger
+    //   const imageLink = await fetchCroppedImage(image);
+    //   debugger
+    //   if (imageLink != false) {
+    //     debugger
+    //     handleCroppedImage(imageLink);
+    //   }
+    // };
     // return (
   //     <>
   //     <Editor value={text} onChange={htmlonChange} />
@@ -376,7 +392,10 @@ const SpecialOffersEditThemeOne = () => {
                   accept="image/png, image/jpeg"
                   className="form-control"
                   name="image"
-                  onChange={updateImageSection}
+                  onChange={(e)=>{
+                    setimageFrom("background")
+                    updateImageSection(e);
+                  }}
                 />
               </div>
               <div className="edit-section">
@@ -414,7 +433,7 @@ const SpecialOffersEditThemeOne = () => {
                                   <div
                                     className="img-option"
                                     onClick={() =>
-                                      handleImageChange(icons, iconIndex)
+                                      handleImageChange(icons, iconIndex, undefined)
                                     }
                                   >
                                     <img
@@ -440,7 +459,10 @@ const SpecialOffersEditThemeOne = () => {
                   accept="image/png, image/jpeg"
                   className="form-control"
                   name="cardImg"
-                  onChange={updateImageSection}
+                  onChange={(e)=>{
+                    setimageFrom("cardImage")
+                    updateImageSection(e);
+                  }}
                 />
               </div>
               <div className="edit-section">
