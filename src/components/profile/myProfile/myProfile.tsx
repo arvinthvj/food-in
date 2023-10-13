@@ -72,7 +72,7 @@ function MyProfile() {
                       }}
                       className="active"
                     >
-                      <i className="fas fa-layer-group"></i>
+                      <i className="fas fa-user-circle"></i>
                       My Profile
                     </a>
                   </li>
@@ -116,7 +116,7 @@ function MyProfile() {
                         handleLogout(e);
                       }}
                     >
-                      <i className="fas fa-power-off"></i>Logout
+                      <i className="fas fa-sign-out-alt"></i>Logout
                     </a>
                   </li>
                 </ul>
@@ -175,15 +175,15 @@ function MyProfile() {
                 </div>
                 <div className="personal-info">
                   <label>Name:</label>
-                  <p>{profileData.name}</p>
+                  <p><strong>{profileData.name}</strong></p>
                 </div>
                 <div className="personal-info">
                   <label>Email Address:</label>
-                  <p>{profileData.email}</p>
+                  <p><strong>{profileData.email}</strong></p>
                 </div>
                 <div className="personal-info">
                   <label>Phone Number:</label>
-                  <p>{profileData.mobile_number}</p>
+                  <p><strong>{profileData.mobile_number}</strong></p>
                 </div>
               </div>
             </div>

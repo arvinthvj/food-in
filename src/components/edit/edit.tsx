@@ -24,17 +24,17 @@ const EditHomeTheme: React.FC = () => {
     get_cms_data();
   }, []);
   useEffect(() => {
-    // const url = new URL(window.location.href);
-    // const token = url.searchParams.get("token");
-    // if (token != null) {
-    //   validateThemEditToken(token).then((res: any) => {
-    //     if (res == false) {
-    //       navigate("/");
-    //     }
-    //   });
-    // } else {
-    //   navigate("/");
-    // }
+    const url = new URL(window.location.href);
+    const token = url.searchParams.get("token");
+    if (token != null) {
+      validateThemEditToken(token).then((res: any) => {
+        if (res == false) {
+          navigate("/");
+        }
+      });
+    } else {
+      navigate("/");
+    }
   }, []);
 
   const checkIsSectionEnabled = (index: any) => {

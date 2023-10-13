@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { breadcrumbbg } from "../../../../../assets/img";
 import { ApiServiceContext } from "../../../../../core/Api/api.service";
 
 function DeliveryInfo() {
@@ -44,7 +43,7 @@ function DeliveryInfo() {
               <div className="row">
                 <div className="col-md-6">
                   <div className="location mt20">
-                    <h4>{jsonData?.theme_1?.delivery?.title}</h4>
+                    <h2>{jsonData?.theme_1?.delivery?.title}</h2>
                     <div>
                       <p>{jsonData?.theme_1?.delivery?.paragraph}</p>
                       {jsonData?.theme_1?.delivery?.note1.is_enable && (
@@ -56,6 +55,7 @@ function DeliveryInfo() {
                         </p>
                       )}
                     </div>
+                    {/* <div dangerouslySetInnerHTML={{ __html: jsonData?.theme_1?.newdelivery?.html }} /> */}
                   </div>
                 </div>
 

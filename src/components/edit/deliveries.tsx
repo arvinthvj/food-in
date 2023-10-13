@@ -4,6 +4,7 @@ import { ApiServiceContext } from "../../core/Api/api.service";
 import { useNavigate } from "react-router";
 import DeliveryInfo from "../home-theme/theme-one/pages-theme/deliveries/deliveries";
 import DeliveriesEditThemeOne from "../home-theme/theme-one/pages-theme/deliveries/deliveriesEditThemeOne";
+import DeliveriesEditorThemeOne from "../home-theme/theme-one/pages-theme/deliveries/deliverieseditor";
 
 const Editdeliveries: React.FC = () => {
   const { get_cms_data, validateThemEditToken } = useContext(ApiServiceContext);
@@ -38,6 +39,7 @@ const Editdeliveries: React.FC = () => {
           <i className="fas fa-edit"></i>
         </a>
         <DeliveryInfo />
+        {/* <DeliveriesEditorThemeOne /> */}
       </div>
       <div
         className="modal fade"

@@ -54,7 +54,7 @@ function CookiePolicy() {
           <div className="row">
             <div className="col-md-12">
               <div className="policy-section">
-                <div
+                <div className="privacycss"
                   dangerouslySetInnerHTML={{
                     __html: cookiePolicyData?.Topic?.details_en,
                   }}

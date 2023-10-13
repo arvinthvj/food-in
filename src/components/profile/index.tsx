@@ -32,10 +32,9 @@ function Profile(close: any) {
 
       // setUserToken(token);
     } else {
-      if(splitURL[1] == "edit-home"){
+      if (splitURL[1] == "edit-home") {
         window.location.reload();
-      }else
-      navigate("/login");
+      } else navigate("/login");
     }
   }, []);
 
@@ -63,7 +62,7 @@ function Profile(close: any) {
           </li>
           <li className="presentation" onClick={() => navigate("/myOrders")}>
             <a href="#" className="menuitem" role="menuitem">
-              <i className="fas fa-user-plus me-2"></i>My Orders
+              <i className="fas fa-tag me-2"></i>My Orders
             </a>
           </li>
           <div className="dropdown-divider my-0"></div>

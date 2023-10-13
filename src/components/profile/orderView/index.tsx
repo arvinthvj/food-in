@@ -104,7 +104,7 @@ const OrderView: React.FC = () => {
                         navigate("/myProfile");
                       }}
                     >
-                      <i className="fas fa-layer-group"></i>
+                      <i className="fas fa-user-circle"></i>
                       My Profile
                     </a>
                   </li>
@@ -149,7 +149,7 @@ const OrderView: React.FC = () => {
                         handleLogout(e);
                       }}
                     >
-                      <i className="fas fa-power-off"></i>Logout
+                      <i className="fas fa-sign-out-alt"></i>Logout
                     </a>
                   </li>
                 </ul>

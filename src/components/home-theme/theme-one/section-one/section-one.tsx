@@ -25,6 +25,7 @@ import { useNavigate } from "react-router-dom";
 import PreOrderModel from "../preOrderModel";
 import { toast } from "react-toastify";
 import TryAgainModal from "../tryAgain";
+
 // import { getPostalCodeSuggestions } from '../../../../redux/Actions';
 // interface SuggestionBoxProps {
 //   suggestionsAPI: string; // API endpoint for suggestions
@@ -37,7 +38,6 @@ const SectionOneThemeOne: React.FC = () => {
   const [postalCodeValue, setPostalCodeValue] = useState("");
   const { getData } = useContext(ApiServiceContext);
   const [preOderShow, setPreOderShow] = useState<any>("");
-  const [trygainShow, setTrygainShow] = useState<Boolean>(false);
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [suggestions, setSuggestions] = useState<any>([]);
@@ -46,6 +46,7 @@ const SectionOneThemeOne: React.FC = () => {
   const [popoverOpen, setpopoverOpen] = useState<any>(false);
   const [errorPostalCode, setErrorPostalCode] = useState<any>("")
   const [responseGot, setResponseGot] = useState <any>(false);
+  const [trygainShow, setTrygainShow] = useState<Boolean>(false);
 
 
   const [error, setError] = useState<string | null>(null); // Added error state
@@ -191,11 +192,15 @@ const SectionOneThemeOne: React.FC = () => {
       return false
     }
     if(filteredOptions?.length && !filteredOptions.filter(e=>e.postcode == searchTerm).length){
+      // toast.error("Post code doesn't match! Please enter valid postcode.")
       setTrygainShow(true)
+
      return false
    }
    if(errorPostalCode.length){
     setTrygainShow(true)
+
+    // toast.error(errorPostalCode);
     return false
 }
 
@@ -377,7 +382,7 @@ const SectionOneThemeOne: React.FC = () => {
           />
         </>
       ) : null}
-       {trygainShow ? (
+        {trygainShow ? (
         <>
           <TryAgainModal
             tryAgainShow={trygainShow}

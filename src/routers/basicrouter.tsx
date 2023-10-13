@@ -46,8 +46,7 @@ import SignUp from "../components/signUp";
 import Login from "../pages/authentication/login";
 import Corporate from "../pages/feature/corporate";
 import CheckOut from "../components/checkout";
-import ContactUs from "../components/contactUs";
-import AllergyAdvise from "../components/allergyAdvise";
+// import SpecialOffers from "../components/specialOffers";
 import AreaNotCovered from "../components/areaNotCovered";
 import ThankYou from "../components/thankYou";
 import TermsAndConditions from "../components/termsAndConditions";
@@ -62,6 +61,10 @@ import DeliveryInfo from "../components/home-theme/theme-one/pages-theme/deliver
 import Editdeliveries from "../components/edit/deliveries";
 import Editspecialoffers from "../components/edit/specialoffer";
 import SpecialOffers from "../components/home-theme/theme-one/pages-theme/specialOffers/specialoffers";
+import EditContactUs from "../components/edit/contactUs";
+import EditAllergyadvise from "../components/edit/allergyadvise";
+import AllergyAdvise from "../components/home-theme/theme-one/pages-theme/allergyadvise/allergyadvise";
+import ContactUs from "../components/home-theme/theme-one/pages-theme/contactUs/contactUs";
 
 const userData = { name: "John", token: "test" };
 
@@ -104,6 +107,8 @@ function Basicrouter() {
           <Route path="/edit-deliveryinfo" element={<Editdeliveries />} />
           <Route path="/edit-specialoffers" element={<Editspecialoffers />} />
 
+          <Route path="/edit-contactus" element={<EditContactUs />} />
+          <Route path="/edit-allergyadvise" element={<EditAllergyadvise />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/areaCovered" element={<AreaCovered />} />
           <Route path="/notifications" element={<AllNotifications />} />

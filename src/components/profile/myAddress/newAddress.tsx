@@ -296,7 +296,7 @@ function NewAddress() {
                         navigate("/myProfile");
                       }}
                     >
-                      <i className="fas fa-layer-group"></i>
+                      <i className="fas fa-user-circle"></i>
                       My Profile
                     </a>
                   </li>
@@ -341,7 +341,7 @@ function NewAddress() {
                         handleLogout(e);
                       }}
                     >
-                      <i className="fas fa-power-off"></i>Logout
+                      <i className="fas fa-sign-out-alt"></i>Logout
                     </a>
                   </li>
                 </ul>
@@ -537,7 +537,7 @@ function NewAddress() {
                         navigate("/myProfile");
                       }}
                     >
-                      <i className="fas fa-layer-group"></i>
+                      <i className="fas fa-user-circle"></i>
                       My Profile
                     </a>
                   </li>
@@ -582,7 +582,7 @@ function NewAddress() {
                         handleLogout(e);
                       }}
                     >
-                      <i className="fas fa-power-off"></i>Logout
+                      <i className="fas fa-sign-out-alt"></i>Logout
                     </a>
                   </li>
                 </ul>

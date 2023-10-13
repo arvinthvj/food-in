@@ -89,13 +89,21 @@ function MyOrders() {
 
   useEffect(() => {
     if (myOrderList) {
-      const { orders_list } = myOrderList;
-      const totalCount = orders_list?.length;
-      setPagination({
-        ...pagination,
-        totalCount,
-        pages: convertToPages(totalCount),
-      });
+      // const { orders_list } = myOrderList;
+      // const totalCount = orders_list?.length;
+      const { total_orders } = myOrderList;
+      const totalOrdersAsNumber = parseInt(total_orders, 10);
+      if (!isNaN(totalOrdersAsNumber)) {
+        const perPageData = totalOrdersAsNumber / 10;
+        const totalCount = Math.round(perPageData);
+
+        setPagination({
+          ...pagination,
+          totalCount,
+          pages: convertToPages(totalCount),
+        });
+      }
+
       // setMyOrderList(orders_list);
     }
   }, [myOrderList]);
@@ -128,6 +136,7 @@ function MyOrders() {
       });
       fetchOrderDetails(pagination.itemsPerPage, page, 0, "all");
     }
+    console.log(pagination.pages);
     switch (type) {
       case "first":
         setPagination({
@@ -151,37 +160,112 @@ function MyOrders() {
 
         break;
       case "prev":
-        setPagination({
-          ...pagination,
-          currentPage: pagination.currentPage - 1,
-        });
+        if (pagination.currentPage > 1) {
+          setPagination({
+            ...pagination,
+            currentPage: pagination.currentPage - 1,
+          });
 
-        fetchOrderDetails(
-          pagination.itemsPerPage,
-          pagination.currentPage - 1,
-          0,
-          "all"
-        );
+          fetchOrderDetails(
+            pagination.itemsPerPage,
+            pagination.currentPage - 1,
+            0,
+            "all"
+          );
+        }
 
         break;
       case "next":
-        setPagination({
-          ...pagination,
-          currentPage: pagination.currentPage + 1,
-        });
+        if (
+          pagination.currentPage <=
+          pagination.pages[pagination.pages.length - 1]
+        ) {
+          setPagination({
+            ...pagination,
+            currentPage: pagination.currentPage + 1,
+          });
 
-        fetchOrderDetails(
-          pagination.itemsPerPage,
-          pagination.currentPage + 1,
-          0,
-          "all"
-        );
-
+          fetchOrderDetails(
+            pagination.itemsPerPage,
+            pagination.currentPage + 1,
+            0,
+            "all"
+          );
+        }
         break;
       default:
         break;
     }
+    //console.log(pagination.pages,pagination.pages[pagination.pages.length-1],"nextdata")
   };
+
+  // const handlePagination = (page: number, type?: string) => {
+  //   if (page) {
+  //     if (page >= 1 && page <= pagination.pages.length) {
+  //       setPagination({
+  //         ...pagination,
+  //         currentPage: page,
+  //       });
+  //       fetchOrderDetails(pagination.itemsPerPage, page, 0, "all");
+  //     }
+  //   } else {
+  //     switch (type) {
+  //       case "first":
+  //         setPagination({
+  //           ...pagination,
+  //           currentPage: 1,
+  //         });
+  //         fetchOrderDetails(pagination.itemsPerPage, 1, 0, "all");
+  //         break;
+  //       case "last":
+  //         setPagination({
+  //           ...pagination,
+  //           currentPage: pagination.pages[pagination.pages.length - 1],
+  //         });
+
+  //         fetchOrderDetails(
+  //           pagination.itemsPerPage,
+  //           pagination.pages[pagination.pages.length - 1],
+  //           0,
+  //           "all"
+  //         );
+  //         break;
+  //       case "prev":
+  //         if (pagination.currentPage > 1) {
+  //           setPagination({
+  //             ...pagination,
+  //             currentPage: pagination.currentPage - 1,
+  //           });
+
+  //           fetchOrderDetails(
+  //             pagination.itemsPerPage,
+  //             pagination.currentPage - 1,
+  //             0,
+  //             "all"
+  //           );
+  //         }
+  //         break;
+  //       case "next":
+  //         if (pagination.currentPage < pagination.pages.length) {
+  //           setPagination({
+  //             ...pagination,
+  //             currentPage: pagination.currentPage + 1,
+  //           });
+
+  //           fetchOrderDetails(
+  //             pagination.itemsPerPage,
+  //             pagination.currentPage + 1,
+  //             0,
+  //             "all"
+  //           );
+  //         }
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //   }
+  // };
+
   const handleNext = () => {
     setNext(pagination.currentPage + 1);
   };
@@ -235,7 +319,7 @@ function MyOrders() {
                         navigate("/myProfile");
                       }}
                     >
-                      <i className="fas fa-layer-group"></i>
+                      <i className="fas fa-user-circle"></i>
                       My Profile
                     </a>
                   </li>
@@ -280,7 +364,7 @@ function MyOrders() {
                         handleLogout(e);
                       }}
                     >
-                      <i className="fas fa-power-off"></i>Logout
+                      <i className="fas fa-sign-out-alt"></i>Logout
                     </a>
                   </li>
                 </ul>
@@ -340,7 +424,9 @@ function MyOrders() {
                             <Link
                               to="#"
                               className="order-buttons-book"
-                              onClick={() => {
+                              onClick={(e) => {
+                                e.preventDefault();
+
                                 setConfirmPastModel({
                                   type: true,
                                   data: item,

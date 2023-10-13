@@ -206,7 +206,7 @@ function EditProfile() {
                       }}
                       className="active"
                     >
-                      <i className="fas fa-layer-group"></i>
+                      <i className="fas fa-user-circle"></i>
                       My Profile
                     </a>
                   </li>
@@ -250,7 +250,7 @@ function EditProfile() {
                         handleLogout(e);
                       }}
                     >
-                      <i className="fas fa-power-off"></i>Logout
+                      <i className="fas fa-sign-out-alt"></i>Logout
                     </a>
                   </li>
                 </ul>

@@ -133,6 +133,7 @@ const DeliveriesEditThemeOne = () => {
   const removeCollection = (index: any) => {
     let updatedCollection: any = [...editData.theme_1.delivery.zone_section];
     updatedCollection.splice(index, 1);
+    setActiveTab(activeTab - 1);
     setEditData((prevJsonData: any) => ({
       ...prevJsonData,
       theme_1: {

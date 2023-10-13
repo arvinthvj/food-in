@@ -38,57 +38,74 @@ function SpecialOffers() {
         </div>
       </div>
       <div className="contact-section">
-<div className="container">
-<div className="row justify-content-center">
-<div className="col-md-10">
-<div className="row">
-<div className="col-md-6 sploffers-grid">
-<h2>Special Offers</h2>
-<div className="spl-content">
-<fieldset>
-<h4>{jsonData?.theme_1?.specialoffers?.title}</h4>
-<div className="offersText">
-<p>{jsonData?.theme_1?.specialoffers?.paragraph}</p>
-<p>{jsonData?.theme_1?.specialoffers?.paragraph_two}</p>
-<p>{jsonData?.theme_1?.specialoffers?.paragraph_three}</p>
-</div>
-</fieldset>
-</div>
-</div>
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-md-10">
+              <div className="row">
+                <div className="col-md-6 sploffers-grid">
+                  <h2>{jsonData?.theme_1?.specialoffers?.title}</h2>
+                  <div className="spl-content">
+                    <fieldset>
+                      <h4>{jsonData?.theme_1?.specialoffers?.sub_title}</h4>
+                      <div className="offersText">
+                        <p>{jsonData?.theme_1?.specialoffers?.paragraph}</p>
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
 
-<div className="col-md-6 sploffers-gridright">
-<p className="mb-3"><strong>{jsonData?.theme_1?.specialoffers?.title_two}</strong></p>
-<div id="cards">
-<h4>{jsonData?.theme_1?.specialoffers?.heading}</h4>
-<ul className="mt-3">
-<li>{jsonData?.theme_1?.specialoffers?.list_one}</li>
-<li>{jsonData?.theme_1?.specialoffers?.list_two}</li>
-</ul>
-<h4>{jsonData?.theme_1?.specialoffers?.heading_two}</h4>
-<ul className="mt-3">
-<li>{jsonData?.theme_1?.specialoffers?.list_two_one}</li>
-<li>{jsonData?.theme_1?.specialoffers?.list_two_two}</li>
-</ul>
-<h4 className="mb-3">{jsonData?.theme_1?.specialoffers?.heading_three}</h4>
-<div className="mb-3">
-<img src={jsonData?.theme_1?.specialoffers?.cardImg} />
-</div>
-<div className="mt-3">
-{jsonData?.theme_1?.specialoffers?.note1.is_enable && (
-                      <p>
-                        <strong>Please Note:</strong>{" "}
-                        {jsonData?.theme_1?.specialoffers?.note1?.text}
-                      </p>
-                    )}
-</div>
-</div>
-</div>
-</div>
-
-</div>
-</div>
-</div>
-</div>
+                <div className="col-md-6 sploffers-gridright">
+                  <p className="mb-3">
+                    <strong>
+                      {jsonData?.theme_1?.specialoffers?.sub_title_two}
+                    </strong>
+                  </p>
+                  <div id="cards">
+                    <h4>{jsonData?.theme_1?.specialoffers?.heading}</h4>
+                    <ul className="mt-3">
+                      {jsonData?.theme_1?.specialoffers?.heading_1?.map(
+                        (e: any) => {
+                          return (
+                            <>
+                              <li>{e?.list_one}</li>
+                            </>
+                          );
+                        }
+                      )}
+                    </ul>
+                    <h4>{jsonData?.theme_1?.specialoffers?.heading_two}</h4>
+                    <ul className="mt-3">
+                      {jsonData?.theme_1?.specialoffers?.heading_2?.map(
+                        (e: any) => {
+                          return (
+                            <>
+                              <li>{e?.list_two}</li>
+                            </>
+                          );
+                        }
+                      )}
+                    </ul>
+                    <h4 className="mb-3">
+                      {jsonData?.theme_1?.specialoffers?.heading_three}
+                    </h4>
+                    <div className="mb-3">
+                      <img src={jsonData?.theme_1?.specialoffers?.cardImg} />
+                    </div>
+                    <div className="mt-3">
+                      {jsonData?.theme_1?.specialoffers?.note1.is_enable && (
+                        <p>
+                          <strong>Please Note:</strong>{" "}
+                          {jsonData?.theme_1?.specialoffers?.note1?.text}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

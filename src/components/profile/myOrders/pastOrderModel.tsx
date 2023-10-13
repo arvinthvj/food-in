@@ -21,10 +21,10 @@ const PastOrderModel: React.FC<pastModelProps> = ({
         </Modal.Header>
         <Modal.Body>
           {/* <input type="file" onChange={onChange} /> */}
-          Do you want to place this order,existing order will be cancel
+          Do you want to place this order, existing order will be cancel
         </Modal.Body>
         <Modal.Footer>
-          <div className="pt-5 d-flex justify-content-between w-100">
+          <div className="pt-2 d-flex justify-content-between w-100">
             <button className="btn btn-primary" onClick={handleClose}>
               Cancel
             </button>
@@ -40,7 +40,7 @@ const PastOrderModel: React.FC<pastModelProps> = ({
             </Link>
           </div>
           <div
-            className="pt-5 d-flex w-50"
+            className="pt-3 d-flex w-50"
             style={{ justifyContent: "center" }}
           ></div>
         </Modal.Footer>

@@ -52,7 +52,7 @@ function PrivacyPolicy() {
           <div className="row">
             <div className="col-md-12">
               <div className="policy-section">
-                <div
+                <div className="privacycss"
                   dangerouslySetInnerHTML={{
                     __html: privacyPolicyData?.Topic?.details_en,
                   }}

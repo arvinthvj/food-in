@@ -46,7 +46,12 @@ const schema = yup.object().shape({
       }
       return false;
     }),
-  register_password: yup.string().required("Password is required"),
+  register_password: yup.string().required("Password is required")
+  .min(8, "Password must be at least 8 characters long")
+  .matches(
+    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+    "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+  ),
   register_address: yup.string().required("Address is required"),
   register_address2: yup.string(),
   register_city: yup.string().required("City is required"),
@@ -416,7 +421,6 @@ const CheckOut = () => {
           dispatch(getUserDetails(response.data));
           // setLoginResult(response.data);
           localStorage.setItem("token", response.data.data.token);
-          
 
           toast.success(response.data.message);
           setOrderPlacedbool(true);
@@ -469,7 +473,9 @@ const CheckOut = () => {
     const response = await getData(end_points.timeSlotApi.url);
 
     if (response) {
-      const Slots = response.data.data.pre_order_date_time;
+      const Slots = response?.data?.data?.pre_order_date_time[0]
+        ? response?.data?.data?.pre_order_date_time[0]
+        : response?.data?.data?.pre_order_date_time;
       const timeSlotOption =
         Slots?.time_slots && Slots?.time_slots?.length > 0
           ? Slots?.time_slots?.map((val: any) => {

@@ -20,6 +20,7 @@ import {
 import { end_points } from "../../../../core/end_points/end_points";
 import { ApiServiceContext } from "../../../../core/Api/api.service";
 import { getLocalValue } from "../../../../utility";
+import { Modal } from "react-bootstrap";
 const getUser = () => {
   const token: any = localStorage.getItem("userDetails");
   return token ? JSON.parse(token) : "";
@@ -45,6 +46,7 @@ function Header() {
   const { cartCount }: any = useSelector<any>((state) => state);
   const [notifyCount, setNotifyCount] = useState<any>([]);
   const [cartCounts, setCartCount] = useState<number>(0);
+  const [showproduct, setShowProduct] = useState<boolean>(false);
   const name = localStorage.getItem("username")
     ? localStorage.getItem("username")
     : "";
@@ -88,8 +90,15 @@ function Header() {
     if (response) {
       const logo_path = response.data.data.data.info.logo;
       const style_fav = response.data.data.data.info.style_fav;
-      const fav_icon = logo_path + "/" + style_fav;
-      document.getElementById("favicon")?.setAttribute("href", fav_icon);
+      const fav_icon = style_fav ? logo_path + "/" + style_fav : logo_path;
+      console.log(fav_icon, "fav_icon");
+
+      // document.getElementById("favicon")?.setAttribute("href", fav_icon);
+      const faviconElement: any = document.getElementById("favicon");
+
+      if (faviconElement) {
+        faviconElement.href = fav_icon;
+      }
       setpusherKey(response.data.data.data.pusher_settings.pusher_key);
       if (response.status != 401) {
         setSettings(response.data.data.data);
@@ -583,6 +592,14 @@ function Header() {
                       className="cart-blk cart-btn"
                       to={cartCounts > 0 ? "/productLists" : "#"}
                       id="toggle-cart"
+                      title={
+                        cartCounts > 0
+                          ? ""
+                          : "No product available in checkout page"
+                      }
+                      onClick={() => {
+                        cartCounts > 0 ? {} : setShowProduct((prev) => !prev);
+                      }}
                     >
                       <i
                         className="fa fa-shopping-cart align-middle"
@@ -747,6 +764,33 @@ function Header() {
       </div>
       <div id="cd-shadow-layer" onClick={cartboxClose}></div>
       {/* {<CartSummary />} */}
+      {showproduct && (
+        <Modal
+          show={showproduct}
+          // onHide={cancel}
+          centered
+          className="modal custom-modal delete-modal continue-model fade multi-step show"
+        >
+          <div className="modal-content p-2">
+            <div className="modal-body"></div>
+            <div className="order-info-cont text-center">
+              <h6 className="mb-4">
+                Oops! No product available in checkout page!
+              </h6>
+              <div className="d-flex justify-content-center gap-3 pr-1 mb-2">
+                <button
+                  className="btn btn-primary"
+                  onClick={() => {
+                    setShowProduct(false);
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

@@ -155,7 +155,7 @@ function EditAddress() {
                         navigate("/myProfile");
                       }}
                     >
-                      <i className="fas fa-layer-group"></i>
+                      <i className="fas fa-user-circle"></i>
                       My Profile
                     </a>
                   </li>
@@ -200,7 +200,7 @@ function EditAddress() {
                         handleLogout(e);
                       }}
                     >
-                      <i className="fas fa-power-off"></i>Logout
+                      <i className="fas fa-sign-out-alt"></i>Logout
                     </a>
                   </li>
                 </ul>
@@ -221,8 +221,7 @@ function EditAddress() {
                         accept-charset="UTF-8"
                         onSubmit={handleSubmit(handleAddressSubmit)}
                       >
-                      &nbsp;
-
+                        &nbsp;
                         <div className="row">
                           <div className="col-md-6 form-group profile-form">
                             <label className="form-label" htmlFor="label">

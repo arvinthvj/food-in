@@ -93,7 +93,7 @@ function MyAddress() {
                         navigate("/myProfile");
                       }}
                     >
-                      <i className="fas fa-layer-group"></i>
+                      <i className="fas fa-user-circle"></i>
                       My Profile
                     </a>
                   </li>
@@ -138,7 +138,7 @@ function MyAddress() {
                         handleLogout(e);
                       }}
                     >
-                      <i className="fas fa-power-off"></i>Logout
+                      <i className="fas fa-sign-out-alt"></i>Logout
                     </a>
                   </li>
                 </ul>
@@ -147,7 +147,7 @@ function MyAddress() {
             <div className="col-md-8">
               <div className="row align-items-center mb-4">
                 <div className="col">
-                  <h4>My Addresses</h4>
+                  <h4>My Address</h4>
                   <p>
                     {" "}
                     List of your billing and delivery addresses. Default address

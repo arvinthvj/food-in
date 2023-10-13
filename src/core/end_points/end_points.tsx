@@ -7,11 +7,14 @@ const register = { url: "register", service: "" };
 const forgetPasswordApi = { url: "forget_password", service: "" };
 const resetPasswordApi = { url: "forgot_password/update", service: "" };
 const settingsApi = { url: "settings", service: "" };
-const notificationListApi = { url: "user_notification_list", service: "" };
+
 const listOfferDetatilsApi = { url: "list_offer_details", service: "" };
 const categoriesListApi = { url: "get_categories?group_id=1", service: "" };
 const areasCoveredApi = { url: "areas_covered", service: "" };
-const userNotificationListApi = { url: "user_notification_list", service: "" };
+const userNotificationListApi = {
+  url: "profile/my_notifications",
+  service: "",
+};
 const faqlist = { url: "faqlist", service: "" };
 
 /////
@@ -73,12 +76,11 @@ export const end_points: Record<string, EndPoint> = {
   forgetPasswordApi,
   resetPasswordApi,
   settingsApi,
-  notificationListApi,
+  userNotificationListApi,
   listOfferDetatilsApi,
   categoriesListApi,
   areasCoveredApi,
   menuListApi,
-  userNotificationListApi,
   faqlist,
   priceSplitListApi,
   checkPostalCodeOfferApi,

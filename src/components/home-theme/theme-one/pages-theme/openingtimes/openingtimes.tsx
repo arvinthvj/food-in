@@ -49,7 +49,7 @@ function OpeningTimes() {
                     <a href="/">Home</a>
                   </li> 
                   <li>
-                    <span>Opening Times123</span>
+                    <span>Opening Times</span>
                   </li>
                 </ul>
               </div>

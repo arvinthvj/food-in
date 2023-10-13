@@ -626,13 +626,14 @@ const ProductLists = () => {
           (subItem: any) => parseInt(subItem?.quantity) > 0
         );
       });
+      console.log(cartInformationData, "cartInformationData");
 
       setCartInformation(cartInformationData);
 
-      if (cartInformationData?.length > 0) {
+      if (cartInformationData?.length >= 0) {
         setTimeout(() => {
           setLocalValue("cartInformationData", cartInformationData);
-        }, 2000);
+        }, 1000);
       }
       if (repeatOrderId != "" && !repeatOrderStatus) {
         // dispatch(clearCart());
@@ -641,13 +642,15 @@ const ProductLists = () => {
         // dispatch(clearCartCount());
         setTimeout(() => {
           repeatOrderData(repeatOrderId);
-        }, 1000);
+        }, 100);
 
         // localStorage.removeItem("cartInformationData");
       }
     }
   }, [productCategories]);
-
+  useEffect(() => {
+    console.log(cartInformation, "cartInformation");
+  }, [cartInformation]);
   return (
     <div>
       <section
@@ -689,10 +692,9 @@ const ProductLists = () => {
                       ? "Open"
                       : "closed"}{" "}
                   </span>{" "}
-                  :{" "}
                   {settings?.info?.online_order_status != "1"
-                    ? "You can pre-order now."
-                    : "You can order now."}
+                    ? ": You can pre-order now."
+                    : ""}
                 </p>
               </div>
             ) : (
@@ -1007,9 +1009,6 @@ const ProductLists = () => {
                     </div>
                     <div className="price-body table-responsive">
                       <table className="order-table">
-                      {cartInformation?.map((item: any) => {
-                            return (
-                              <>
                         <thead>
                           <tr>
                             <th className="item_quantity">Qty</th>
@@ -1020,8 +1019,11 @@ const ProductLists = () => {
                             </th>
                           </tr>
                         </thead>
-                        <tbody id="cart_body">
-                          {/* {cartInformation?.map((item: any) => {
+                        {cartInformation?.map((item: any) => {
+                          return (
+                            <>
+                              <tbody id="cart_body">
+                                {/* {cartInformation?.map((item: any) => {
                             return (
                               <> */}
                                 {item?.subcategories[0].products
@@ -1113,7 +1115,6 @@ const ProductLists = () => {
                                           &nbsp;
                                           {splitAmountDetails?.currency_symbol}
                                           {(
-                                          
                                             parseFloat(subCategory?.quantity) *
                                               parseFloat(subCategory?.price) +
                                             parseFloat(
@@ -1144,13 +1145,12 @@ const ProductLists = () => {
                                       </tr>
                                     );
                                   })}
-                            
-                          {/* // })} */}
-                        </tbody>
-                        </>
-                            );
-                      })}
 
+                                {/* // })} */}
+                              </tbody>
+                            </>
+                          );
+                        })}
                       </table>
                       <div className="cs-option-amt">
                         <div className="cs-option-amt-list">
@@ -1298,7 +1298,8 @@ const ProductLists = () => {
                       >
                         Checkout{" "}
                         <span className="option-total total-amt">
-                          {splitAmountDetails?.currency_symbol}{cartFinalTotal}
+                          {splitAmountDetails?.currency_symbol}
+                          {cartFinalTotal == "0" ? "" : cartFinalTotal}
                         </span>
                       </button>
                     </div>

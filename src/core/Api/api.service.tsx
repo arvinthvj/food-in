@@ -86,6 +86,7 @@ const ApiServiceProvider = (props: {
 
   const save_cms_data = async (jsonData: any) => {
     let data = JSON.stringify(jsonData);
+    console.log("savedata", data);
     const response = await postData("json_store", { cms_json: data });
     if (response) {
       dispatch(saveThemeJsonData(jsonData));
@@ -99,7 +100,7 @@ const ApiServiceProvider = (props: {
     } else return false;
   };
   const validateThemEditToken = async (token: any) => {
-    const response: any = await postData("validate_token", { token:token });
+    const response: any = await postData("validate_token", { token: token });
     if (response) {
       if (response.data.code === "200") {
         return true;
@@ -111,8 +112,8 @@ const ApiServiceProvider = (props: {
   const get_cms_data = async () => {
     const response: any = await getData("json_view");
     if (response) {
-      // dispatch(saveThemeJsonData(JSON.parse(response.data.data.data)));
-      console.log("dhashd0",JSON.parse(response.data.data.data))
+      dispatch(saveThemeJsonData(JSON.parse(response.data.data.data)));
+      console.log("get_cms_data",JSON.parse(response.data.data.data))
     }
   };
 
@@ -127,7 +128,7 @@ const ApiServiceProvider = (props: {
         save_cms_data,
         get_cms_data,
         fetchCroppedImage,
-        validateThemEditToken
+        validateThemEditToken,
       }}
     >
       {props.children}

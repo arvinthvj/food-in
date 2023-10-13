@@ -13,7 +13,7 @@ function Notification() {
 
   const [notificationList, setNotificationList] = useState([]);
   const notificationListData = async () => {
-    const response = await getData(end_points.notificationListApi.url);
+    const response = await getData(end_points.userNotificationListApi.url);
     if (response.status != 401) {
       setNotificationList(response.data.data);
     }

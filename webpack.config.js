@@ -82,7 +82,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./public/index.html",
       filename: "./index.html",
-      favicon: false,
+      favicon: "./public/favicon.png",
     }),
     new webpack.ProvidePlugin({
       sodium: "libsodium-wrappers",
