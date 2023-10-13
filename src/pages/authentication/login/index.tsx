@@ -38,11 +38,10 @@ const loginResultData = {
     },
   },
 };
-
 function Login() {
   const { postData } = useContext(ApiServiceContext);
-  const notify = (message: string) => toast(message);
-
+  
+  
   const [emailValue, setEmailValue] = useState("");
   const [pwdValue, setPwdValue] = useState("");
   const [genError, setGenError] = useState("");
@@ -205,7 +204,7 @@ function Login() {
   const handleSubmit = async (event?: any) => {
     event.preventDefault();
     setIsSubmit(true);
-
+debugger
     try {
       // const response: any = await axios.post(
       //   `${base_url}/api/login`,
@@ -865,7 +864,7 @@ function Login() {
           </div>
         </div>
       </div>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </div>
   );
 }

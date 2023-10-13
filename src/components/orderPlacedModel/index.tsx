@@ -1,17 +1,20 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface OrderPlacedProps {
   orderPlacedbool: any;
   cancel: any;
   message: any;
+  guestUser: any
 }
 const OrderPlacedModel: React.FC<OrderPlacedProps> = ({
   orderPlacedbool,
   cancel,
   message,
+  guestUser
 }) => {
+  const navigate = useNavigate();
   return (
     <>
       <Modal
@@ -31,12 +34,21 @@ const OrderPlacedModel: React.FC<OrderPlacedProps> = ({
                 {message?.order_reference}
               </div>
               <div className="d-flex gap-3 p-1 pt-2 justify-content-end">
-                <Link
+                <div
                   className="btn btn-primary"
-                  to={`/orderView/${message?.order_id}`}
+                 onClick={()=>{
+                  debugger
+                  if(guestUser){
+                    localStorage.setItem('guestUserInitialLoadToOrdersPage',`/orderView/${message?.order_id}`)
+                    window.location.reload();
+                    
+                  }else{
+                    navigate(`/orderView/${message?.order_id}`)
+                  }
+                 }}
                 >
                   view Order Summary
-                </Link>
+                </div>
                 <Link to="/" className="btn btn-primary" onClick={cancel}>
                   Close
                 </Link>

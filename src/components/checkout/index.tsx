@@ -108,7 +108,7 @@ const CheckOut = () => {
   // order placed
   const [orderPlacedbool, setOrderPlacedbool] = useState<boolean>(false);
   const [orderPlacedRes, setOrderPlacedRes] = useState<any>([]);
-
+  const [isGuestUser , setIsGuestUser] = useState<any>(false);
   const [existinglogin, setExistinglogin] = useState<boolean>(false);
   const [newAddress, setNewAddress] = useState<boolean>(false);
   const [addressList, setAddressList] = useState<any>([]);
@@ -420,8 +420,11 @@ const CheckOut = () => {
           hideLoader();
           dispatch(getUserDetails(response.data));
           // setLoginResult(response.data);
-          localStorage.setItem("token", response.data.data.token);
-
+          if(!localStorage.getItem("token")){
+            setIsGuestUser(true)
+            localStorage.setItem("token", response.data.data.token);
+          }
+          
           toast.success(response.data.message);
           setOrderPlacedbool(true);
           setOrderPlacedRes(response.data.data);
@@ -1195,6 +1198,7 @@ const CheckOut = () => {
         <OrderPlacedModel
           orderPlacedbool={orderPlacedbool}
           message={orderPlacedRes}
+          guestUser ={isGuestUser}
           cancel={() => {
             setOrderPlacedbool(false);
           }}

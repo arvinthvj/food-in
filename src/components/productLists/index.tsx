@@ -25,6 +25,7 @@ import { end_points } from "../../core/end_points/end_points";
 import { ApiServiceContext } from "../../core/Api/api.service";
 import CustomizeModel from "./customizeModel";
 import { getLocalValue, removeDuplicates, setLocalValue } from "../../utility";
+import "./productList.css"
 const ProductLists = () => {
   const { postData } = useContext(ApiServiceContext);
   const [close, setClose] = useState(false);
@@ -111,6 +112,13 @@ const ProductLists = () => {
       // });
     }
   };
+  useEffect(()=>{
+    if(localStorage.getItem('guestUserInitialLoadToOrdersPage')){
+      const copyPath = localStorage.getItem('guestUserInitialLoadToOrdersPage');
+      localStorage.removeItem("guestUserInitialLoadToOrdersPage");
+      navigate(copyPath);
+    }
+},[]);
   useEffect(() => {
     // repeatOrderData("100");
     console.log(
@@ -1279,8 +1287,8 @@ const ProductLists = () => {
                         className={`continue-btn ${
                           parseInt(cartFinalTotal) <
                           parseInt(minimum_order_amount)
-                            ? "hover-btn"
-                            : ""
+                            ? "disabled"
+                            : "hover-btn"
                         } center-block`}
                         // disabled={selectedcategoryPriceList?.itemsCount === 0}
                         disabled={
