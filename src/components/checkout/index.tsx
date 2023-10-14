@@ -297,7 +297,7 @@ const CheckOut = () => {
         return;
       }
       setLoading(true);
-      if (selectedItem == null && data?.register_address == "") {
+      if (selectedItem == null && data?.register_address == ""  && data?.deliveryType != "pickup") {
         if (addressList?.length > 0) {
           toast.error("please select the delivery address!");
           myAddresref?.current?.focus();
@@ -375,12 +375,29 @@ const CheckOut = () => {
           user_id: userDetails?.data?.user?.id || "",
           user_type: "1", //order as guest && logged user--2
         };
+        let checkAndUpdateValuesIfDelTypePickup = (obj :Object)=>{
+          if(data?.deliveryType != "pickup"){
+            return obj
+          }
+          let delTypeValuesOnPickupToEmpty = {
+            address_id : 1,
+            register_address: "",
+            register_address2: "",
+            register_city: "",
+            register_email: "",
+            register_mobile: "",
+            register_name: "",
+            register_password: "",
+            register_zip: "",
+          };
+          return {...obj, ...delTypeValuesOnPickupToEmpty}
+        }
         const flattenedCartItems = [].concat(...cardItem);
         let payload = {
           account_detail:
             !logged_user && data?.register_name
-              ? newAccountDetail
-              : accountDetailsAddress,
+              ? checkAndUpdateValuesIfDelTypePickup(newAccountDetail)
+              : checkAndUpdateValuesIfDelTypePickup(accountDetailsAddress),
           cart_checkout_data: {
             cart_items: flattenedCartItems,
 

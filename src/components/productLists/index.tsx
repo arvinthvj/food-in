@@ -65,7 +65,7 @@ const ProductLists = () => {
   );
   const cartFinalTotal = splitAmountDetails?.cart_final_total
     ? splitAmountDetails?.cart_final_total
-    : 0;
+    : "";
   // -----------------------Repeat order ---=-==-=-==-=-=--=-=-=--=-=-=-=-=
   const repeatOrderData = async (id: any = "100") => {
     let payload = { order_id: id };
